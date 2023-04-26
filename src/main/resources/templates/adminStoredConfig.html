@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori admin</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+	</head>
+	
+	<body>
+	
+		<th:block th:insert="fragments/headerFooter :: adminHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Stored Task Confugurations')"/>
+		<h4>Task configurations for dataset: [[${idDataset}]]</h4>
+		
+		<p class="standard"> Please copy the Task Configuration ID and paste it into the 'Apriori task configuration ID' field in the 'Create new task' form in the eTutor++. </p>
+
+		<table align="center" >
+			<thead>
+		  		<tr>
+				    <th>Configuration</br>name</th>
+				    <th>Configuration ID</th>
+				    <th>Minimun</br>support</br>(1. Task)</th>
+				    <th>Minimum</br>confidence</br>(2. Task)</th>
+				    <th>Number of </br>elements to </br>generate rule </br>(2. Task)</th>
+				    <th> Number of</br>rules queried</br>(2. Task)</th>
+		  		</tr>
+			</thead>
+			<tbody>   
+				<tr th:each="l : ${cl}" th:field="${l}">
+			        <td th:text="${l.comment}"></td>
+		  			<td th:text="${l.uuid_ac}"></td>
+		  			<td th:text="${l.minsupport}"></td>
+		  			<td th:text="${l.minconfidence}"></td>
+		  			<td th:text="${l.numelementsrule}"></td>
+		  			<td th:text="${l.numrulesasked}"></td>
+<!-- diabled feature (export of task configuration id)
+		  			
+		  			<td>
+						<form action="#" th:action="@{/exportToMap}"> 				
+							<input hidden type="text" class="buttonTextInput"  th:name="adminProcessNo"  th:id="iduuid" th:value="${adminService.getAdminProcessNo()}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="idDataset"   th:value="${l.uuid_ht}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="configId"  th:value="${l.uuid_ac}" />
+							<button  class="buttonNumber" style="width:120px;" type="submit" >Export</button> 
+						</form>	
+					</td>
+					
+-->
+					<td>
+						<form action="#" th:action="@{/loadStoredConfig}"> 
+							<input hidden type="text" class="buttonTextInput"  th:name="adminProcessNo"   th:value="${adminService.getAdminProcessNo()}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="uuid_ds"  th:id="uuid_dsI" th:value="${l.uuid_ht}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="uuid_ac"  th:id="uuid_acI" th:value="${l.uuid_ac}" />
+							<button  class="buttonNumber" style="width:120px;" type="submit" >View</button> 
+						</form>	
+					</td>
+					<td>
+						<form action="#" th:action="@{/deleteConfig}"> 
+							<input hidden type="text" class="buttonTextInput"  th:name="adminProcessNo"   th:value="${adminService.getAdminProcessNo()}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="idConfig"  th:value="${l.uuid_ac}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="idDataset"  th:value="${l.uuid_ht}" />
+							<button  class="buttonNumber" style="width:120px;" type="submit" >Delete</button> 
+						</form>	
+					</td>
+      			</tr>
+	    	</tbody>
+		</table>
+		
+		</br></br></br>
+		
+		<th:block th:insert="fragments/headerFooter :: footer"/>		
+		
+		
+	</body>
+</html>		

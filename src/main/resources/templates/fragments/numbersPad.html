@@ -1,0 +1,63 @@
+
+<th:block th:fragment="pad(padid,hiddenInput,shownInput)">
+<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+									<div th:id="${padid}" class="wrapperKeypad">
+										<div class="wrapperNumbers">
+											<input class="buttonNumber" type="button" value="1" th:onclick="addNumber(1,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="2" th:onclick="addNumber(2,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="3" th:onclick="addNumber(3,[[${shownInput}]],[[${hiddenInput}]])"/>		
+											<input class="buttonNumber" type="button" value="4" th:onclick="addNumber(4,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="5" th:onclick="addNumber(5,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="6" th:onclick="addNumber(6,[[${shownInput}]],[[${hiddenInput}]])"/>											
+											<input class="buttonNumber" type="button" value="7" th:onclick="addNumber(7,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="8" th:onclick="addNumber(8,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="9" th:onclick="addNumber(9,[[${shownInput}]],[[${hiddenInput}]])"/>											
+											<input class="buttonNumber" type="button" value="Del" th:onclick="popInputField([[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="0" th:onclick="addNumber(0,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="OK" th:onclick="
+												hideNshow([[${padid}]],[[${padid}]]);ok([[${shownInput}]]);"/>	
+										</div>
+									</div>
+				
+</th:block>									
+									
+<th:block th:fragment="studentConfigFunction">		
+<script  th:inline="javascript">
+			function addNumber(newText, field, inputField) {
+				let text = document.getElementById(field).innerHTML;
+				text2 = text+newText;
+				document.getElementById(field).innerHTML=text.replace(text,text2);
+				document.getElementById(inputField).value=text.replace(text,text2);
+			}			
+			function popInputField(field, inputField){
+				let text = document.getElementById(field).innerHTML;
+				text2=text.substr(0, text.length - 1);
+				document.getElementById(field).innerHTML=text.replace(text,text2);
+				document.getElementById(inputField).value=text.replace(text,text2);			
+				if(document.getElementById(field).innerHTML==""){
+					document.getElementById(inputField).value=0;
+				}
+			}
+</script>
+</th:block>	
+
+<th:block th:fragment="padApriori(padid,hiddenInput,shownInput,hideShow)">
+<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+									<div th:id="${padid}" class="wrapperKeypad">
+										<div class="wrapperNumbers">
+											<input class="buttonNumber" type="button" value="1" th:onclick="addNumber(1,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="2" th:onclick="addNumber(2,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="3" th:onclick="addNumber(3,[[${shownInput}]],[[${hiddenInput}]])"/>		
+											<input class="buttonNumber" type="button" value="4" th:onclick="addNumber(4,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="5" th:onclick="addNumber(5,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="6" th:onclick="addNumber(6,[[${shownInput}]],[[${hiddenInput}]])"/>											
+											<input class="buttonNumber" type="button" value="7" th:onclick="addNumber(7,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="8" th:onclick="addNumber(8,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="9" th:onclick="addNumber(9,[[${shownInput}]],[[${hiddenInput}]])"/>											
+											<input class="buttonNumber" type="button" value="Del" th:onclick="popInputField([[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="0" th:onclick="addNumber(0,[[${shownInput}]],[[${hiddenInput}]])"/>
+											<input class="buttonNumber" type="button" value="OK" th:onclick="
+												hideNshow([[${hideShow}]],[[${shownInput}]]);"/>	
+										</div>
+									</div>				
+</th:block>		

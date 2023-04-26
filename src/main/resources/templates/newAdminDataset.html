@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori admin</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+
+	<body th:onload="hideAll();">
+
+		<th:block th:insert="fragments/headerFooter :: adminHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Dataset/ Task Configuration ')"/>
+
+		<form action="#" th:action="@{/newSetupAdminDataset}"> 
+			<input hidden  type="text" th:name="adminProcessNo" th:value=${adminService.adminProcessNo}>
+			<input hidden  type="number" th:name="noTransactionsLevel" th:value=${adminService.noTransactionsLevel}>
+			<input hidden  type="number" th:name="avItemsLevel"  th:value=${adminService.avItemsLevel}>
+			<input hidden  type="number" th:name="maxItemsLevel" placeholder="maxSize here" th:value=${adminService.maxItemsLevel}>
+			<input hidden  type="number" th:name="minItemsLevel" th:id="inputMin" th:value=${adminService.minItemsLevel}>
+			<input hidden  type="text"  th:name="types"  th:value=${adminService.typeDatasetLevel}>
+			
+			<input hidden   type="number" th:name="minSupportLevel" th:value=${adminService.minSupportLevel}>
+			<input  hidden  type="number"  th:name="noRulesLevel" th:value=${adminService.noRulesLevel}>
+			<input hidden   type="number"  th:name="askRulesLevel" th:value=${adminService.askRulesLevel}>
+			<input hidden   type="number"  th:name=" minConfidenceLevel" th:value=${adminService.minConfidenceLevel}>
+			
+			<input  hidden  type="text"  th:name=" difficultyLevel" th:value=${adminService.getDifficultyLevel()}>
+			<br/>	
+			
+		<table>
+			<tr th:unless="${adminService.noTransactionsLevel == 0}">
+				<td style="text-align: center; border-style: hidden;">
+					<button class="buttonNumber" style="width:100%;" type="submit" >Generate new dataset with same parameters</button> 
+				</td>
+		</form>
+
+				<td style="text-align: center;border-style: hidden;">
+					<form th:action="@{/newSetupAdminDatasetModify}">
+						<input hidden type="text" th:name="adminProcessNo" th:value=${adminService.adminProcessNo}>
+		   				<button class="buttonNumber" style="width:100%;" type="submit" >Generate new dataset with new parameters</button> 
+					</form>	
+				</td>
+			</tr>
+		</table>	
+															
+		<th:block th:insert="fragments/tables :: datasetTable"/>
+	
+		<div>
+			<div th:id="enterNameDs">
+				<h4> If you wish, you can enter a name for the data record.</h4>
+				<div align="center">
+					<form action="#" th:action="@{/newSetupAdminDatasetSave}">
+						<input class="inputText" th:id="inputDsName" th:name="name" style="width: 50%;" type="text" id="inputName"  th:value="${adminService.nameDataset}" align=center>
+				</div>
+			</div>
+		</div>
+		<p class="standard"> (Dataset's UUID: [[${adminService.idDataset}]])</p>
+						<input hidden type="text" th:name="adminProcessNo" th:value=${adminProcessNo}>
+		    			<button class="buttonNumber" style="width: 100%; margin:auto;display:block;" type="submit" >Save Dataset</button> 
+					</form>
+		<hr>	
+		<h3> <b>Task Configuration </b></h3>						
+		<h3>Task 1: <b>Apriori</b> preview with a <b>minimum support</b> of <b>[[${adminService.minSupportLevel}]]</b>.</h3>			
+		<form action="#" th:id="supportForm" th:action="@{/newSetupAdminNewTaskConfig}"> 
+			<input hidden type="text" th:name="adminProcessNo" th:value=${adminProcessNo}>
+			<input hidden type="text" th:name="askRulesLevel" th:value=${askRulesLevel}>
+			<input hidden type="text" th:name="minConfidenceLevel" th:value=${minConfidenceLevel}>
+			
+<input hidden type="text" th:name="noRulesLevel" th:value=${adminService.getNoRulesLevel()}>
+			
+			<table>					
+				<tr class="row">
+	        		<td >
+	        			<p class="param" style="float: left;" th:utext="'Enter new &lt;strong&gt;minimum support &lt;/strong&gt; for task configuration: &nbsp; '"/>
+	        			<p class="hide" th:text="'(Minimum: 2; Maximum: '+${adminService.getMinsupport()}+' (App Constant))'"/>
+	        		</td>
+	        		<td >
+						<input hidden type="number" th:name="minSupportLevel" th:id="inputSup" placeholder="supportCount here" th:value=${minSupportLevel}>
+						<div class="numbersField">		
+							<div th:id="supNumber" th:class="fieldNumberInput" th:value=${minSupportLevel} th:text="${minSupportLevel}" 
+								th:onclick="hideNshow('padSup','padSup'); "></div>	
+						</div>		
+						<th:block th:insert="fragments/numbersPad :: pad('padSup','inputSup','supNumber')"/>
+					</td>
+				</tr> 					
+			</table>								
+		</form>					
+		
+		<div class="full">
+	    	<div class="left">
+				</br>
+				<h4 align="center">Interim Results:</h4>
+				
+				<table >
+				    <thead>
+				      <tr> 
+				        <th>ID</th>				       
+				        <th>InterimResult</th>			
+				      </tr>
+				    </thead>
+				    
+					<tbody>
+				      <tr th:each="lHT : ${solutionList}" th:field="${lHT}">
+						<td th:text="${lHT.id}"></td>   
+				      	<td> 
+				      	
+							<table >
+								<thead>
+									<tr> 
+								    	<th>Items</th>
+								        <th>Support Count</th>
+									</tr>
+								</thead>
+							    
+								<tbody>
+									<tr th:each="l2HT : ${lHT.row}" th:field="${lHT.row}">
+										<td>
+											<div th:text="${#strings.arrayJoin(l2HT.items, ', ')}"></div>
+										</td>
+										 <td th:text="${l2HT.supportCount}"></td>
+									</tr>
+								</tbody>
+							</table>
+					
+				        </td>
+				      </tr>
+					</tbody>
+				</table>
+				
+	    	</div>		
+			<div class="right">
+				</br>
+				<h4 align="center">Frequent Items:</h4>
+				
+				<table align="center">
+					<thead>
+						<tr>
+							<th>Support Count</th>
+							<th>Items</th>
+						</tr>
+					</thead>
+					<tbody>  
+						<tr th:each="listir : ${frequentSolutionList}" th:field="${listir}">
+							<td th:text="${listir.count}"></td>
+							<td>
+								<div th:text="${#strings.arrayJoin(listir.items, ', ')}"></div>
+							</td>
+						</tr>
+					</tbody>		
+				</table>	
+
+	    	</div>
+		</div>
+		</br>					
+		<h3>Task 2: <b>Association rules</b> preview with a <b>minimum confidence</b> of <b>[[${adminService.minConfidenceLevel}]]%</b>. </h3>
+		<form action="#" th:id="confidenceForm"  th:action="@{/newSetupAdminNewTaskConfig}"> 
+			<input hidden type="text" th:name="adminProcessNo" th:value=${adminProcessNo}>
+			<input hidden type="text" th:name="minSupportLevel" th:value=${minSupportLevel}>
+			<input hidden type="text" th:name="askRulesLevel" th:value=${askRulesLevel}>
+			
+<input hidden type="text" th:name="noRulesLevel" th:value=${adminService.getNoRulesLevel()}>
+			
+			<table>					
+				<tr class="row">
+	        		<td>
+		        		<p class="param" style="float: left;" th:utext="'Enter new &lt;strong&gt; minimum confidence &lt;/strong&gt; for task configuration (percent): &nbsp; '"/>
+		        		<p class="hide" th:text="'(Minimum: 0%, Maximum: '+${adminService.getMinconfidence()}+'% (App Constant))'"/> 
+	        		</td>
+	        		<td>    					
+						<input  hidden type="number" th:id="inputMinConf" th:name="minConfidenceLevel" placeholder="minConf here" th:value=${adminService.minConfidenceLevel}>
+						<div class="numbersField">		
+							<div th:id="minConfPercent" th:class="fieldNumberInput" th:value=${adminService.minConfidenceLevel} th:text="${adminService.minConfidenceLevel}" 
+								th:onclick="hideNshow('padConf','padConf')"></div>
+						</div>						
+						<th:block th:insert="fragments/numbersPad :: pad('padConf','inputMinConf','minConfPercent')"/>
+					</td>
+				</tr> 										
+		</form>	
+		
+				<form action="#" th:id="elementsForm" th:action="@{/newSetupAdminNewTaskConfig}"> 
+					<input hidden type="text" th:name="adminProcessNo" th:value=${adminProcessNo}>
+					<input hidden type="text" th:name="minSupportLevel" th:value=${minSupportLevel}>
+					<input hidden type="text" th:name="minConfidenceLevel" th:value=${minConfidenceLevel}>	
+					<input hidden type="text" th:name="askRulesLevel" th:value=${askRulesLevel}>
+					
+				<tr class="row">
+	        		<td >
+		        		<p class="param" style="float: left;" th:utext="'&lt;strong&gt;Number of Elements &lt;/strong&gt;to generate derived rules from: &nbsp; '"/>
+		        		<p class="hide" th:utext="'(Minimum: 2, Maximum: '+${adminService.getNorules()}+' (App Constant), &lt;/br&gt;if available otherwise maximum number possible)'"/> 
+	        		</td>
+	        		<td >    					
+						<input hidden  type="number" th:id="inputRules" th:name="noRulesLevel" placeholder="number elements here" th:value=${adminService.getNoRulesLevel()}>
+						<div class="numbersField">		
+							<div th:id="rulesNumbers" th:class="fieldNumberInput" th:value=${adminService.getNoRulesLevel()} th:text="${adminService.getNoRulesLevel()}" 
+								th:onclick="hideNshow('padRules','padRules');"></div>	
+						</div>		
+						<th:block th:insert="fragments/numbersPad :: pad('padRules','inputRules','rulesNumbers')"/>
+					</td>
+				</tr> 		
+			</form>
+							
+				<form action="#" th:id="askForm" th:action="@{/newSetupAdminNewTaskConfig}"> 
+					<input hidden type="text" th:name="adminProcessNo" th:value=${adminProcessNo}>
+					<input hidden type="text" th:name="minSupportLevel" th:value=${minSupportLevel}>
+					<input hidden type="text" th:name="minConfidenceLevel" th:value=${minConfidenceLevel}>	
+					
+					<input hidden type="text" th:name="noRulesLevel" th:value=${adminService.getNoRulesLevel()}>
+						
+				<tr class="row">
+	        		<td >
+		        		<p class="param" style="float: left;" th:utext="'Enter new &lt;strong&gt;number of rules &lt;/strong&gt; to query for task configuration: &nbsp; '"/>
+		        		<p class="hide" th:utext="'(Minimum: 0, Maximum: '+${adminService.getAskrules()}+' (App Constant), &lt;/br&gt;if available otherwise maximum number possible)'"/> 
+	        		</td>
+	        		<td >    					
+						<input  hidden type="number" th:id="inputRulesAsk" th:name="askRulesLevel" placeholder="number elements here" th:value=${askRulesLevel}>
+						<div class="numbersField">			
+							<div th:id="rulesNumbersAsk" th:class="fieldNumberInput" th:value=${askRulesLevel} th:text="${askRulesLevel}" 
+								th:onclick="hideNshow('padAsk','padAsk')"></div>
+						</div>						
+						<th:block th:insert="fragments/numbersPad :: pad('padAsk','inputRulesAsk','rulesNumbersAsk')"/>			
+					</td>
+				</tr> 					
+			</table>		
+									
+				</form>								
+		<div align="center">
+			<p class="standard" th:utext="'Freuquent pattern for deriving rules: &lt;strong&gt;'+${#strings.arrayJoin(frequentPatternForRules, ', ')+'&lt;/strong&gt;'}"></p>
+			<p class="standard"> Total number of possible rules from pattern: <b>[[${totalNumberOfRules}]]</b></p>
+			<p class="standard"> Number of rules queried in the second task: <b>[[${askRulesLevel}]]</b></p>
+		</div>
+		
+		<table align="center">
+			<thead>
+				<tr>
+					<th >Generated Rule</th>
+					<th> Valid Rule</th>
+				</tr>
+			</thead>
+			<tbody> 
+				<tr th:each="listir : ${ruleList}" th:field="${listir}">
+					<td>
+						<div th:text="${listir}"></div>
+					</td>
+					<td>
+						<div th:with="text2=${
+														#strings.substring(
+														#strings.substring(
+															#strings.substring(listir,
+															#strings.indexOf(listir,'=')+1
+															)
+														,
+														#strings.indexOf(#strings.substring(listir,
+															#strings.indexOf(listir,'=')+1
+															),'=')+1
+														)
+														,
+														#strings.indexOf(
+														#strings.substring(
+															#strings.substring(listir,
+															#strings.indexOf(listir,'=')+1
+															)
+														,
+														#strings.indexOf(#strings.substring(listir,
+															#strings.indexOf(listir,'=')+1
+															),'=')+1
+														)
+														,'=')+1,
+														#strings.indexOf(
+														#strings.substring(
+														
+															#strings.substring(listir,
+															#strings.indexOf(listir,'=')+1
+															)
+														,
+														#strings.indexOf(#strings.substring(listir,
+															#strings.indexOf(listir,'=')+1
+															),'=')+1
+														)
+														,'%')
+														)
+														}
+														,
+														nu=${adminService.getWithinConstraint(text2,minConfidenceLevel)}
+													"
+													style="color:rgb(0, 128, 0)"
+													th:text="${nu}">
+						</div>	
+					</td>
+				</tr>	
+			</tbody>		
+		</table>
+
+		<div>							
+			<div th:id="enterNameC">	
+				<h4> If you wish, you can enter a name for the task configuration.</h4>
+				<div align="center">
+				<form action="#" th:action="@{/newSetupAdminConfigSave}" >
+					<input class="inputText" style="width: 50%;" type="text" id="inputNameConfig" name="nameTaskConfigI" th:value="${adminService.nameConfig}" align=center>
+				</div>
+			</div>	
+		</div>
+		<p class="standard"> (Task Config UUID: [[${adminService.idTaskConfig}]])</p>
+					<input hidden type="text" th:name="adminProcessNo" th:value=${adminService.adminProcessNo}>
+					<input hidden type="text" th:id="inputDS" th:name="nameDatasetI" th:value=${adminService.nameDataset}>
+		    		<button class="buttonNumber" style="width: 100%; margin:auto;display:block;" type="submit" >Save Dataset & Task Configuration</button> 
+				</form>
+				
+		</br>
+		<p align="center" class="standard"> When you have saved, please copy the Task Configuration ID and paste it into the 'Apriori task configuration ID' field in the 'Create new task' form in eTutor++. </p>
+		</br></br></br></br></br>
+		
+		<th:block th:insert="fragments/headerFooter :: footer"/>
+		
+	</body>
+	<th:block th:insert="fragments/numbersPad :: studentConfigFunction"/>
+	<script  th:inline="javascript">
+	
+		function validateMinConf(){			
+			let y =  document.getElementById("minConfPercent").innerHTML;
+			if(isNaN(y)|| Number(y) < 0 || Number(y) > 100){
+				document.getElementById('validateInterimSupport').style.display = "block";
+				return false;
+			}
+			return true;
+		}
+	
+		function hide(whichField){
+			document.getElementById(whichField).style.display = "none";
+		}
+    	
+    	function hideAll(){
+			hide('padSup');
+			hide('padConf');
+			hide('padAsk');	
+			hide('padRules');
+		}
+		
+		function hideNshow(whichField, focusField){
+			var element = document.getElementById(whichField);
+			var status;
+			if (element.style.display === "none") {
+				status = false;
+				}else{status=true;}
+				if(status==true && whichField=='padSup'){
+					changeSupport();
+				}				
+				if(status==true && whichField=='padConf'){
+					changeConfidence();
+				}				
+				if(status==true && whichField=='padAsk'){
+					changeRules();
+				}
+				if(status==true && whichField=='padRules'){
+					changeElements();
+				}
+			hideAll();	
+			if (status === false) {
+					element.style.display = "block";
+					element.scrollIntoView(false);
+				} else {
+					hide(whichField);
+				}
+		}
+		
+		function changeSupport(){	
+			var elementMinSupConst = Number([[${adminService.getMinsupport()}]]);
+					
+			let y =  document.getElementById("supNumber").innerHTML;
+			if(isNaN(y)){
+				document.getElementById('inputSup').innerHTML=1;
+				document.getElementById('inputSup').value=1;
+				document.getElementById('supNumber').innerHTML=1;
+				document.getElementById('supNumber').value=1;
+			}
+			if(Number(y) < 1){
+				document.getElementById('inputSup').innerHTML=1;
+				document.getElementById('inputSup').value=1;
+				document.getElementById('supNumber').innerHTML=1;
+				document.getElementById('supNumber').value=1;
+			}
+			if(Number(y) > elementMinSupConst){	
+				document.getElementById('inputSup').innerHTML=elementMinSupConst;
+				document.getElementById('inputSup').value=elementMinSupConst;
+				document.getElementById('supNumber').innerHTML=elementMinSupConst;
+				document.getElementById('supNumber').value=elementMinSupConst;
+			}
+			document.getElementById('supportForm').submit();				
+		}
+	
+		function changeConfidence(){
+			var elementMinConfConst = Number([[${adminService.getMinconfidence()}]]);
+			
+			let y =  document.getElementById("minConfPercent").innerHTML;
+			if(isNaN(y)){
+				document.getElementById('inputMinConf').innerHTML=0;
+				document.getElementById('inputMinConf').value=0;
+				document.getElementById('minConfPercent').innerHTML=0;
+				document.getElementById('minConfPercent').value=0;
+			}
+			if(Number(y) < 0){
+				document.getElementById('inputMinConf').innerHTML=0;
+				document.getElementById('inputMinConf').value=0;
+				document.getElementById('minConfPercent').innerHTML=0;
+				document.getElementById('minConfPercent').value=0;
+			}
+			if(Number(y) > elementMinConfConst){
+				document.getElementById('inputMinConf').innerHTML=elementMinConfConst;
+				document.getElementById('inputMinConf').value=elementMinConfConst;
+				document.getElementById('minConfPercent').innerHTML=elementMinConfConst;
+				document.getElementById('minConfPercent').value=elementMinConfConst;
+			}
+			document.getElementById('confidenceForm').submit();	
+		}		
+		
+		function changeElements(){
+			
+			var elementNoRulesConst = Number([[${adminService.getNorules()}]]);	
+		
+			let y =  document.getElementById("rulesNumbers").innerHTML;
+			if(isNaN(y)){
+				document.getElementById('inputRules').innerHTML=0;
+				document.getElementById('inputRules').value=0;
+				document.getElementById('rulesNumbers').innerHTML=0;
+				document.getElementById('rulesNumbers').value=0;
+			}
+			if(Number(y) < 2){
+				document.getElementById('inputRules').innerHTML=2;
+				document.getElementById('inputRules').value=2;
+				document.getElementById('rulesNumbers').innerHTML=2;
+				document.getElementById('rulesNumbers').value=2;
+			}
+			if(Number(y) > elementNoRulesConst){
+				document.getElementById('inputRules').innerHTML=elementNoRulesConst;
+				document.getElementById('inputRules').value=elementNoRulesConst;
+				document.getElementById('rulesNumbers').innerHTML=elementNoRulesConst;
+				document.getElementById('rulesNumbers').value=elementNoRulesConst;
+			}
+			document.getElementById('elementsForm').submit();	
+			
+		}
+		
+		function changeRules(){
+			var elementAskRulesConst = Number([[${adminService.getAskrules()}]]);
+			
+			let y =  document.getElementById("rulesNumbersAsk").innerHTML;
+			if(isNaN(y)){
+				document.getElementById('inputRulesAsk').innerHTML=0;
+				document.getElementById('inputRulesAsk').value=0;
+				document.getElementById('rulesNumbersAsk').innerHTML=0;
+				document.getElementById('rulesNumbersAsk').value=0;
+			}
+			if(Number(y) < 0){
+				document.getElementById('inputRulesAsk').innerHTML=0;
+				document.getElementById('inputRulesAsk').value=0;
+				document.getElementById('rulesNumbersAsk').innerHTML=0;
+				document.getElementById('rulesNumbersAsk').value=0;
+			}
+			if(Number(y) > elementAskRulesConst){
+				document.getElementById('inputRulesAsk').innerHTML=elementAskRulesConst;
+				document.getElementById('inputRulesAsk').value=elementAskRulesConst;
+				document.getElementById('rulesNumbersAsk').innerHTML=elementAskRulesConst;
+				document.getElementById('rulesNumbersAsk').value=elementAskRulesConst;
+			}
+			document.getElementById('askForm').submit();	
+		}	
+		
+		
+	</script>
+</html>		

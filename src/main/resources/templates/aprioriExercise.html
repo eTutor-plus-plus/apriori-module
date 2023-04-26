@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori exercise</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+	
+	<body th:onload="hideAll();">
+	
+		<th:block th:insert="fragments/headerFooter :: exerciseHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Exercise Apriori')"/>
+		
+		<h4>
+			Please apply the <b>apriori algorithm</b> with a <b>minimum support</b> of <b>[[${exerciseService.getMinSupportLevel()}]]</b> using the given dataset.
+		</h4>		
+		
+		<div class="full">
+		    <div class="left">
+		          <th:block th:insert="fragments/tables :: datasetTable"/>
+		    </div>
+		    <div class="right">
+		   		<th:block th:insert="fragments/tables :: tableFrequentItemsDeleteButton"/>
+		   		<form  th:id="deleteFormFrequent" action="#" th:action="@{/deleteFrequentExercise}">
+		   			<input hidden type="text" th:id="exerciseProcessNoInterimD" th:name="exerciseProcessNoD" th:value=${exerciseService.exerciseProcessNo} />	
+		   			<input hidden type="text" th:id="itemsFormFrequentD" th:name="itemsFrequentD" />			   		
+		   			<input hidden type="number" th:id="supportFrequentInputD" th:name="supportFrequentD" />	
+		   		</form>
+		    </div>
+		</div>
+		<div >
+			<h4 align="center">Interim Results:</h4>	
+				
+			<table >
+			    <thead>
+			      <tr> 
+			        <th>ID</th>
+			        <th>InterimResult</th>
+			      </tr>
+			    </thead>
+				<tbody>
+					<tr th:each="interimTable : ${exerciseService.getExerciseList()}" th:field="${interimTable}">
+						<td th:text="${interimTable.id}"></td>   
+			      		<td> 
+							<table>
+								<thead>
+									<tr> 
+										<th>Items</th>
+										<th>SupportCount</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="interimRow : ${interimTable.row}" th:field="${interimTable.row}">
+										<td>
+											<div th:text="${#strings.arrayJoin(interimRow.items, ', ')}"></div>
+										</td>
+										<td th:text="${interimRow.supportCount}"></td>
+										<td align="right">
+											<button class="buttonItem" th:id="delInterimAA" style="font-size: 12px;float:none;" 
+												th:onclick="deleteInterim([[${#strings.arrayJoin(interimRow.items, ', ')}]],[[${interimRow.supportCount}]], [[${interimTable.idNumber}]])" >&#9003;</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>	    	
+			
+				<form  th:id="deleteFormInterim" action="#" th:action="@{/deleteInterimExercise}">		   		
+		   			<input hidden type="text" th:id="exerciseProcessNoInterimD" th:name="exerciseProcessNoD" th:value=${exerciseService.exerciseProcessNo} />			   		
+		   			<input hidden type="number" th:id="stepFormInterimD" th:name="stepInterimD" />	
+		   			<input hidden type="text" th:id="itemsFormInterimD" th:name="itemsInterimD" />				   		
+		   			<input hidden type="number" th:id="supportInterimInputD" th:name="supportInterimD" />		   			
+		   		</form>
+		</div>	
+		<h4>
+			Input box for intermediate results for <b>L[[${exerciseService.stepNumber}]]</b> ([[${exerciseService.stepNumber}]]-Itemset): 
+		</h4>	
+		<div th:id="inputBoxIntermediate" class="ruleBoxWrapper">
+			<table>
+				<tr>
+					<div class="ruleBox">
+						<p>
+							<div th:class="itemsCurrent" th:text="'Items for current row in L'+${exerciseService.stepNumber}+': '" ></div>
+							<div  th:id="itemsInterim" th:class="itemsCurrent" 
+								th:onclick="hideNshow('chooseInterimItems','itemsInterim')">
+									<span th:id="itemsInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter items here\''"></span>	
+								</div>
+								<div th:id="validateInterimItems"style="float:left;color: rgb(255, 0, 0);"> 
+									&#8592; Please, enter items!
+								</div>
+							<div style="float:none;" > </br></div>
+						</p>
+				
+						<form name="myForm" action="#" onsubmit="return validateInterim();" th:action="@{/addInterimExercise}">
+							<input hidden type="text" th:id="exerciseProcessNoInterim" th:name="exerciseProcessNo" required th:value=${exerciseService.exerciseProcessNo} />	
+							<th:block th:id="interimsItems">
+								<div style="float:none;" > </br></div>
+								<div th:id="chooseInterimItems"  style="padding-left: 24px;">
+								<div style="float:none;" > </br></div>
+								<div th:class="standard" style="text-align: left;" th:text="'Please choose from available items: '" ></div>
+									<input name="fname" hidden type="text" th:id="itemsFormInterim" th:name="itemsInterim" />					
+									<th:block th:each="aItem : ${exerciseService.availableItems}">								
+										<input class="buttonItem" type="button" th:value=${aItem} th:onclick="addItemInterim([[${aItem}]])"/>											
+									</th:block>					
+									<input class="buttonItem" style="font-size: 25px;" type="button" value="&#9003;" th:onclick="removeItemInterim();"/>
+								</div>
+							</th:block>
+							<p>	
+								<div th:class="itemsCurrent" style="float:left;" th:text="'Associated support count for current row in L'+${exerciseService.stepNumber}+': '" ></div>
+								<div th:id="supportInterim" th:class="itemsCurrent" 
+									th:onclick="hideNshow('chooseInterimSupport','supportInterim')">
+										<span th:id="supportInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter support count here\''"></span>
+								</div>								
+								<div th:id="validateInterimSupport"style="float:left;color: rgb(255, 0, 0);"> 
+									&#8592; Please, enter support count!
+								</div>
+							</p>
+							<div th:id="interimsSupport">
+								<div th:id="chooseInterimSupport" style="padding-left: 24px;">
+									<input hidden type="number" th:id="supportInterimInput" th:name="supportInterimI" />									
+									<th:block  th:insert="fragments/numbersPad :: padApriori('padSupportInterim','supportInterimInput','supportInterim','chooseInterimSupport')"/>
+									</br></br></br></br>
+								</div>
+							</div>	
+												
+							<button class="buttonNumber" th:id="saveRow" style="width: 100%; margin:auto;display:block;" type="submit" ><b>Save</b> row</button>			
+										
+						</form>	
+						<div class=".clear"></div>
+				</tr>
+			</table>
+		</div>		
+		<h4>
+			Input box for frequent pattern:
+		</h4>
+		<div class="ruleBoxWrapper">	
+			<table>
+				<tr>
+					<div class="ruleBox">
+						<p>
+							<div th:class="itemsCurrent" th:text="'Items for current row in frequent pattern: '" ></div>
+							<div th:id="itemsFrequent" th:class="itemsCurrent" 
+								th:onclick="hideNshow('chooseFrequentItems','itemsFrequent')">
+									<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter items here\''"></span>
+								</div>
+								<div th:id="validateFrequentItems"style="float:left;color: rgb(255, 0, 0);"> 
+									&#8592; Please, enter items!
+								</div>								
+							<div style="float:none;" > </br></div>
+						</p>						
+						<form  action="#" onsubmit="return validateFrequent()" th:action="@{/addFrequentExercise}"> 				
+							<input hidden type="text" th:id="exerciseProcessNoInterim" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo} >					
+						<th:block th:id="frequentItems">
+							<div style="float:none;" > </br></div>
+								<div th:id="chooseFrequentItems" style="padding-left: 24px;">
+									<div style="float:none;" > </br></div>
+									<div th:class="standard" style="text-align: left;" th:text="'Please choose from available items: '" ></div>
+									<input hidden type="text" th:id="itemsFormFrequent" th:name="itemsFrequent" />								
+									<th:block th:each="aItem : ${exerciseService.availableItems}">								
+										<input class="buttonItem" type="button" th:value=${aItem} th:onclick="addItemFrequent([[${aItem}]])"/>												
+									</th:block>
+									<input class="buttonItem" style="font-size: 25px;" type="button" value="&#9003;" th:onclick="removeItemFrequent();"/>							
+								</div>
+						</th:block>
+						<p>
+							<div  th:class="itemsCurrent"  th:text="'Associated support count for current row in frequent pattern: '" ></div>
+							<div th:id="supportFrequent" th:class="itemsCurrent" 
+								th:onclick="hideNshow('chooseFrequentSupport','supportFrequent')">
+									<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter support count here\''"></span>
+								</div>								
+								<div th:id="validateFrequentSupport"style="float:left;color: rgb(255, 0, 0);"> 
+									&#8592; Please, enter support count!
+								</div>								
+						</p>
+						<div th:id="chooseFrequentSupport" style="padding-left: 24px;">							
+							<input hidden type="number" th:id="supportFrequentInput" th:name="supportFrequentI" />							
+							<th:block  th:insert="fragments/numbersPad :: padApriori('padSupportFrequent','supportFrequentInput','supportFrequent','chooseFrequentSupport')"/>
+							</br></br></br></br>
+						</div>
+						<button class="buttonNumber" th:id="saveFreuquent" style="width: 100%; margin:auto;display:block;" type="submit" ><b>Save</b> row</button>		
+						</form>			
+					</div>
+				</tr>	
+			</table>
+		</div>
+		
+		<table>
+			<tr>
+				<td style="text-align: center; border-style: hidden;">
+					<div th:if="${(exerciseService.stepNumber-1) == 0}">
+						<button class="buttonNumber" style="width:100%;background-color: rgb(244, 244, 244); " th:utext="'&lt;b&gt;Previous&lt;/b&gt; step (L'+${exerciseService.stepNumber-1}+')'" type="submit" ></button> 
+					</div>					
+					<div th:if="${(exerciseService.stepNumber-1) != 0}">
+						<form th:action="@{/lastStepExercise}">
+							<input hidden type="text" th:id="lastStepTraining" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo} >	
+							<button class="buttonNumber" style="width:100%;" th:utext="'&lt;b&gt;Previous&lt;/b&gt; step (L'+${exerciseService.stepNumber-1}+')'" type="submit" ></button> 
+						</form>	
+					</div>					
+				</td>
+				<td style="text-align: center;border-style: hidden;">
+					<form th:action="@{/terminateAprioriExercise}">
+						<input hidden type="text" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo}>
+		    			<button class="buttonNumber" style="width:100%;" type="submit" ><b>Terminate</b> Apriori Task</button> 
+					</form>	
+				</td>
+				<td>
+					<div th:if="${exerciseService.emptyInterim()==true}">
+					
+						<button class="buttonNumber" style="width:100%;background-color: rgb(244, 244, 244); " th:utext="'&lt;b&gt;Next&lt;/b&gt; step (L'+${exerciseService.stepNumber+1}+')'" type="submit" ></button>
+					
+					</div>
+				
+					<div th:if="${exerciseService.emptyInterim()==false}">
+						<form th:action="@{/nextStepExercise}">
+							<input hidden type="text" th:id="nextStepExercise" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo} >	
+							<button class="buttonNumber" style="width:100%;" th:utext="'&lt;b&gt;Next&lt;/b&gt; step (L'+${exerciseService.stepNumber+1}+')'" type="submit" ></button> 
+						</form>		
+					</div>				
+				
+				</td>
+			</tr>
+		</table>	
+		
+		</br></br></br></br>
+
+		<th:block th:insert="fragments/headerFooter :: footer"/>		
+	</body>	
+	<script  th:inline="javascript">
+
+		var itemsListInterim = [];
+		var itemListInterimDisplay = [];
+		var itemsListFrequent = [];
+		var itemsListFrequentDisplay = [];
+			
+		function deleteInterim(items, supportCount,step){	   		
+			document.getElementById("stepFormInterimD").value = step;		   		
+			document.getElementById("itemsFormInterimD").value = items;
+			document.getElementById("supportInterimInputD").value = supportCount;
+			document.getElementById("deleteFormInterim").submit();
+		}
+		
+		function deleteFrequent(items,supportCount){
+			document.getElementById("itemsFormFrequentD").value = items;			
+			document.getElementById("supportFrequentInputD").value = supportCount;			
+			document.getElementById("deleteFormFrequent").submit();
+		}
+		
+		function addNumber(newText, field, inputField) {
+			if(isNaN(document.getElementById(field).innerHTML)){
+				document.getElementById(field).innerHTML="";
+			}
+			let text = document.getElementById(field).innerHTML;
+			text2 = text+newText;
+			document.getElementById(field).innerHTML=text.replace(text,text2);
+			document.getElementById(inputField).value=text.replace(text,text2);
+		}
+		
+		function popInputField(field, inputField){
+			let text = document.getElementById(field).innerHTML;
+			text2=text.substr(0, text.length - 1);
+			document.getElementById(field).innerHTML=text.replace(text,text2);
+			document.getElementById(inputField).value=text.replace(text,text2);			
+			if(document.getElementById(field).innerHTML==""){
+				document.getElementById(inputField).value=0;
+				document.getElementById(field).innerHTML="0";
+			}
+		}
+		
+		function removeItemInterim(){
+			itemsListInterim.pop();
+			itemListInterimDisplay.pop();
+			document.getElementById("itemsInterim").innerHTML =itemListInterimDisplay+"   ";
+			document.getElementById("itemsFormInterim").value = itemsListInterim.toString();
+		}
+			
+		function addItemInterim(item){
+			itemsListInterim.push(item);
+			item="  "+item;
+			itemListInterimDisplay.push(item);
+			document.getElementById("itemsInterim").innerHTML =itemListInterimDisplay+"   ";
+			document.getElementById("itemsFormInterim").value = itemsListInterim.toString();
+
+		}
+	
+		function removeItemFrequent(){
+			itemsListFrequent.pop();
+			itemsListFrequentDisplay.pop();
+			document.getElementById("itemsFrequent").innerHTML =itemsListFrequentDisplay+"   ";
+			document.getElementById("itemsFormFrequent").value = itemsListFrequent.toString();
+		}
+	
+		function addItemFrequent(item){
+			itemsListFrequent.push(item);
+			item="  "+item;
+			itemsListFrequentDisplay.push(item);
+			document.getElementById("itemsFrequent").innerHTML =itemsListFrequentDisplay+"   ";
+			document.getElementById("itemsFormFrequent").value = itemsListFrequent.toString();
+		}
+
+		function hide(whichField){
+			document.getElementById(whichField).style.display = "none";
+		}
+    	
+    	function hideAll(){
+			hide('chooseInterimItems');
+			hide('chooseFrequentSupport');
+			hide('chooseInterimSupport');
+			hide('chooseFrequentItems');
+			hide('validateInterimItems');
+			hide('validateInterimSupport');
+			hide('validateFrequentSupport');
+			hide('validateFrequentItems');	
+		}
+		
+		function hideBorderAll(){
+			document.getElementById('itemsInterim').style.border = "none";
+			document.getElementById('supportInterim').style.border = "none";
+			document.getElementById('chooseInterimSupport').style.border = "none";
+			document.getElementById('chooseFrequentItems').style.border = "none";	
+			document.getElementById('itemsFrequent').style.border = "none";	
+			document.getElementById('supportFrequent').style.border = "none";	
+		}
+		
+		function hideNshow(whichField, focusField){
+			var element = document.getElementById(whichField);
+			var status;
+			if (element.style.display === "none") {
+				status = false;
+				}else{status=true;}
+			hideAll();	
+			hideBorderAll();
+			if (status === false) {
+					document.getElementById(focusField).style.border = "1px solid black";
+					element.style.display = "block";
+				} else {
+					hide(whichField);
+				}
+		}
+
+		
+	
+		function validateInterim(){
+			let x = document.getElementById("itemsInterim").innerHTML;
+    		if (x == '\'Please, enter items here\'' || itemsListInterim==''){
+				document.getElementById('validateInterimItems').style.display = "block";
+				return false;
+			}
+
+			let y =  document.getElementById("supportInterim").innerHTML;
+			
+			if(isNaN(y)|| Number(y) < 1 || Number(y) > 1000){
+				document.getElementById('validateInterimSupport').style.display = "block";
+				return false;
+			}
+
+			if (y == '\'Please, enter support count here\'' || y=='0'){
+				document.getElementById('validateInterimSupport').style.display = "block";
+				return false;
+			}
+			return true;
+		}
+
+		function validateFrequent(){
+		
+			let x = document.getElementById("itemsFrequent").innerHTML;
+    		if (x == '\'Please, enter items here\'' || itemsListFrequent==''){
+				document.getElementById('validateFrequentItems').style.display = "block";
+				return false;
+			}
+			let y =  document.getElementById("supportFrequent").innerHTML;
+		
+			if(isNaN(y) || Number(y) < 1 || Number(y) > 1000){
+				document.getElementById('validateFrequentSupport').style.display = "block";
+				return false;
+			}
+			
+			if (y == '\'Please, enter support count here\'' || y=='0'){
+				document.getElementById('validateFrequentSupport').style.display = "block";
+				return false;
+			}
+			
+			 return true;
+		}	
+	</script>	
+</html>	

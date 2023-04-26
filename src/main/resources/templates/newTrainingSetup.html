@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori training</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+	
+	<body th:onload="hideAll();">
+		
+		<th:block th:insert="fragments/headerFooter :: trainingHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Training Setup')"/>
+
+		<div align="center" style="width:100%;">
+	
+			<table align="center">
+
+				<tr>
+					<td>
+						<b>Current Difficulty Level is 
+							<th:block th:switch="${trainingService.getDifficultyLevel()}">
+								<b th:case="'easy'" th:text="'EASY'"></b>
+								<b th:case="'moderate'" th:text="'MODERATE'"></b>
+								<b th:case="'hard'" th:text="'HARD'"></b>
+								<b th:case="'very_hard'" th:text="'EXPERT'"></b>
+							</th:block>
+						</b>
+					</td>
+					<td></td>
+				</tr>
+
+				<tr class="row">
+					<td>
+						<p class="param" style="float: left;" th:text="'Change Difficulty Configuration: &nbsp; '"/>
+	        			<p class="hide" th:text="'(Please, choose from list)'"/>
+					</td>
+					<td >
+						<form action="#" th:id="difficultyForm" th:action="@{/newTrainingSetup}"> 
+							<input hidden type="text" th:id="trainingProcessNoID" th:name="trainingProcessNo" th:value="${trainingProcessNo}">
+							<select class="fieldNumberInput" style="font-size: 12px;" th:id="typeL" name="level">
+								<option th:value="sameOld" >Select difficulty configuration</option>
+	    						<option class="buttonNumber" th:each="typeOption : ${T(apriori.logic.utility.TypeDifficultyLevel).values()}" 
+	        						th:value="${typeOption}" th:text="${typeOption.displayValue}" th:onclick="changeDifficulty();"></option>
+							</select>
+						</form>	
+					</td>	
+		     	</tr> 
+		     	<tr><td></td></tr>
+		     	
+		<form action="#" th:action="@{/newTrainingDataset}"> 
+			<input hidden  type="text" th:name="trainingProcessNo" th:value=${trainingService.getTrainingProcessNo()}>
+			<input hidden  type="text" th:name="difficultyLevel" th:value=${trainingService.getDifficultyLevel()}>
+				<tr>
+					<td>
+						<b>Dataset: Parameter (modify difficulty level)</b>
+					</td>
+					<td></td>
+				</tr>
+				<tr class="row">
+	        		<td >
+	        			<p class="param" style="float: left;" th:text="'Number of transactions in dataset: &nbsp; '"/>
+	        			<p class="hide" th:text="'(Minimum: 2, Maximum: '+${TrainingService.getNotransactions()}+')'"/>
+	        		</td>
+	        		<td >								
+						<input hidden  type="number" th:name="noTransactionsLevel" th:id="inputTransactions" th:value=${trainingService.getNoTransactionsLevel()}>	
+						<div class="numbersField">
+							<div th:id="transactionsNumber" th:class="fieldNumberInput" th:value=${trainingService.getNoTransactionsLevel()} th:text="${trainingService.getNoTransactionsLevel()}" 
+								th:onclick="hideNshow('padTransactions','padTransactions');validate('transactionsNumber')"></div>
+						</div>				
+						<th:block th:insert="fragments/numbersPad :: pad('padTransactions','inputTransactions','transactionsNumber')"/>	
+					</td>
+				</tr> 
+				
+				<tr class="row">
+					<td >
+						<p class="param" style="float: left;" th:text="'Number of available items: &nbsp; '"/>
+						<p class="hide" th:text="'(Minimum: 2, Maximum: '+${TrainingService.getAvitems()}+')'"/>
+					</td>
+					<td >
+						<input hidden  type="number" th:name="avItemsLevel" th:id="inputAvailable" placeholder="maxElements here" th:value=${trainingService.getAvItemsLevel()}>
+						<div class="numbersField">	
+							<div th:id="availableNumber" th:class="fieldNumberInput" th:value=${trainingService.getAvItemsLevel()} th:text="${trainingService.getAvItemsLevel()}" 
+								th:onclick="hideNshow('padAvailable','padAvailable');validate('availableNumber')"></div>
+						</div>	
+						<th:block th:insert="fragments/numbersPad :: pad('padAvailable','inputAvailable','availableNumber')"/>
+					</td>
+				</tr> 	
+				
+				<tr class="row">
+	        		<td >
+	        			<p class="param" style="float: left;" th:text="'Maximum number of items in transaction: &nbsp; '"/>
+	        			<p class="hide" th:text="'(Minimum: 2, Maximum: '+${TrainingService.getMaxitems()}+' and number of available items)'"/>
+	        		</td>
+	        		<td >
+
+						<input hidden  type="number"  th:name="maxItemsLevel" th:id="inputMax"  th:value=${trainingService.getMaxItemsLevel()}>
+						<div class="numbersField">	
+							<div th:id="maxNumber" th:class="fieldNumberInput" th:value=${trainingService.getMaxItemsLevel()} th:text="${trainingService.getMaxItemsLevel()}" 
+								th:onclick="hideNshow('padMax','padMax');validate('maxNumber');"></div>
+						</div>				
+						<th:block th:insert="fragments/numbersPad :: pad('padMax','inputMax','maxNumber')"/>
+					</td>
+				</tr> 					
+				
+				<tr class="row">
+	        		<td >
+	        			<p class="param" style="float: left;" th:text="'Minimum number of items in transaction: &nbsp; '"/>
+	        			<p class="hide" th:text="'(Minimum: 2, Maximum: '+${TrainingService.getMinitems()}+' and maximum number of items)'"/>
+	        		</td>
+	        		<td >
+						<input hidden  type="number" th:name="minItemsLevel" th:id="inputMin"th:value=${trainingService.getMinItemsLevel()} >
+						<div class="numbersField">		
+							<div th:id="minNumber" th:class="fieldNumberInput" th:value=${trainingService.getMinItemsLevel()} th:text="${trainingService.getMinItemsLevel()}" 
+								th:onclick="hideNshow('padMin','padMin');validate('minNumber')"></div>
+						</div>	
+						<th:block th:insert="fragments/numbersPad :: pad('padMin','inputMin','minNumber')"/>
+					</td>
+				</tr>
+							
+				<tr class="row">  
+					<td>
+						<p class="param" style="float: left;" th:text="'Type of dataset: &nbsp; '"/>
+	        			<p class="hide" th:text="'(Please, choose from list)'"/>
+					</td>
+					<td >
+						<input hidden  type="text" th:id="inputType" th:name="types" placeholder="type here" value="ABC">
+						<select class="fieldNumberInput" style="font-size: 12px;" th:id="typeT" name="typeDataset">
+	    					<option class="buttonNumber" th:each="typeOpt : ${T(apriori.logic.utility.TypeDataset).values()}" 
+	        					th:value="${typeOpt}" th:text="${typeOpt.displayValue}" 
+	        					th:onclick="document.getElementById('inputType').value=document.getElementById('typeT').value">
+	        				</option>
+						</select>
+					</td>
+				</tr> 
+				<tr><td></td></tr>
+		     				
+				<tr>
+					<td>
+						<b>1. Task: Parameter Apriori (modify difficulty level)</b>
+					</td>
+					<td></td>
+				</tr>		     				
+		     				
+				<tr class="row">
+	        		<td >
+	        			<p class="param" style="float: left;" th:text="'Minimum Support for apriori algorithmus: &nbsp; '"/>
+	        			<p class="hide" th:text="'(Minimum: 2; Maximum: '+${TrainingService.getMinsupport()}+')'"/>
+	        		</td>
+	        		<td >
+						<input hidden type="number" th:name="minSupportLevel" th:id="inputSup" placeholder="supportCount here" th:value=${trainingService.getMinSupportLevel()}>
+						<div class="numbersField">		
+							<div th:id="supNumber" th:class="fieldNumberInput" th:value=${trainingService.getMinSupportLevel()} th:text="${trainingService.getMinSupportLevel()}" 
+								th:onclick="hideNshow('padSup','padSup');validate('supNumber')"></div>
+						</div>		
+						<th:block th:insert="fragments/numbersPad :: pad('padSup','inputSup','supNumber')"/>
+					</td>
+				</tr> 
+		     			
+		     	<tr><td></td></tr>		
+		     				
+				<tr>
+					<td>
+						<b>2. Task: Parameter Deriving Rules (modify difficulty level)</b>
+					</td>
+					<td></td>
+				</tr>
+				
+				<tr class="row">
+	        		<td >
+		        		<p class="param" style="float: left;" th:text="'Number of Elements to generate derived rules from: &nbsp; '"/>
+		        		<p class="hide" th:text="'(Minimum: 2, Maximum: '+${TrainingService.getNorules()}+', if available otherwise maximum number possible)'"/> 
+	        		</td>
+	        		<td >    					
+						<input  hidden type="number" th:id="inputRules" th:name="noRulesLevel" placeholder="number elements here" th:value=${trainingService.getNoRulesLevel()}>
+						<div class="numbersField">		
+							<div th:id="rulesNumbers" th:class="fieldNumberInput" th:value=${trainingService.getNoRulesLevel()} th:text="${trainingService.getNoRulesLevel()}" 
+								th:onclick="hideNshow('padRules','padRules');validate('rulesNumbers')"></div>	
+						</div>		
+						<th:block th:insert="fragments/numbersPad :: pad('padRules','inputRules','rulesNumbers')"/>
+					</td>
+				</tr> 
+				
+				<tr class="row">
+	        		<td >
+		        		<p class="param" style="float: left;" th:text="'Number of rules to query: &nbsp; '"/>
+		        		<p class="hide" th:text="'(Minimum: 0, Maximum: '+${TrainingService.getAskrules()}+', if available otherwise maximum number possible)'"/> 
+	        		</td>
+	        		<td >    					
+						<input  hidden type="number" th:id="inputRulesAsk" th:name="askRulesLevel" placeholder="number elements here" th:value=${trainingService.getAskRulesLevel()}>
+						<div class="numbersField">			
+							<div th:id="rulesNumbersAsk" th:class="fieldNumberInput" th:value=${trainingService.getAskRulesLevel()} th:text="${trainingService.getAskRulesLevel()}" 
+								th:onclick="hideNshow('padAsk','padAsk');validate('rulesNumbersAsk')"></div>
+						</div>						
+						<th:block th:insert="fragments/numbersPad :: pad('padAsk','inputRulesAsk','rulesNumbersAsk')"/>			
+					</td>
+				</tr> 
+			
+				<tr class="row">
+	        		<td >
+		        		<p class="param" style="float: left;" th:text="'Minimum confidence for deriving rules (percent): &nbsp; '"/>
+		        		<p class="hide" th:text="'(Minimum: 0%, Maximum: '+${TrainingService.getMinconfidence()}+'%)'"/> 
+	        		</td>
+	        		<td >    					
+						<input  hidden type="number" th:id="inputMinConf" th:name="minConfidenceLevel" placeholder="minConf here" th:value=${trainingService.getMinConfidenceLevel()}>
+						<div class="numbersField">		
+							<div th:id="minConfPercent" th:class="fieldNumberInput" th:value=${trainingService.getMinConfidenceLevel()} th:text="${trainingService.getMinConfidenceLevel()}" 
+								th:onclick="hideNshow('padConf','padConf');validate('minConfPercent')"></div>
+						</div>						
+						<th:block th:insert="fragments/numbersPad :: pad('padConf','inputMinConf','minConfPercent')"/>
+					</td>
+				</tr> 
+							
+			</table>
+			<br/>	
+				<button class="buttonNumber" style="width:120px;" type="submit" ><b>Generate</b></button> 	
+			<br/>
+			<br/>
+			<br/>
+		</form>	
+	</div>
+
+		<th:block th:insert="fragments/headerFooter :: footer"/>
+	
+	</body>
+    <th:block th:insert="fragments/numbersPad :: studentConfigFunction"/>
+    <script  th:inline="javascript">
+    
+		function hide(whichField){
+			document.getElementById(whichField).style.display = "none";
+		}
+    	
+    	function hideAll(){
+			hide('padTransactions');
+			hide('padAvailable');
+			hide('padMax');
+			hide('padMin');
+			hide('padSup');
+			hide('padRules');
+			hide('padAsk');
+			hide('padConf');
+		}
+		
+		function hideNshow(whichField, focusField){
+			var element = document.getElementById(whichField);
+			var status;
+			if (element.style.display === "none") {
+				status = false;
+				}else{status=true;}
+			hideAll();	
+			if (status === false) {
+					element.style.display = "block";
+					element.scrollIntoView(false);
+				} else {
+					hide(whichField);
+					
+				}
+		}
+		
+		function changeDifficulty(){
+			document.getElementById('trainingProcessNoID').value=[[${trainingService.getTrainingProcessNo()}]];
+			document.getElementById('difficultyForm').submit();
+		}
+		
+		function ok(field){
+			validate(field);
+		}
+		
+		function valMin(fieldOne,fieldTwo,num){
+			if(fieldOne.innerHTML<num){
+				fieldOne.innerHTML=num;
+				fieldOne.value=num;
+				fieldTwo.innerHTML=num;
+				fieldTwo.value=num;
+			}
+		}
+		
+		function valMax(fieldOne,fieldTwo,fieldComp){		
+			if(Number(fieldOne.innerHTML)>Number(fieldComp)){
+				fieldOne.innerHTML=fieldComp;
+				fieldOne.value=fieldComp;
+				fieldTwo.innerHTML=fieldComp;
+				fieldTwo.value=fieldComp;
+			}
+		}
+		
+		function validateNoTransactions(priority){
+			let elementShowNoTransactions = document.getElementById('transactionsNumber');
+			let elementInputNoTransactions = document.getElementById('inputTransactions');
+			let elementNoTransactionsConst = [[${trainingService.getNotransactions()}]];
+			
+			elementShowNoTransactions.value=elementShowNoTransactions.innerHTML;
+			elementInputNoTransactions.innerHTML=elementInputNoTransactions.value;
+			valMin(elementShowNoTransactions,elementInputNoTransactions,2);
+			valMax(elementShowNoTransactions,elementInputNoTransactions,elementNoTransactionsConst);
+		}
+		
+		function validateAvailableItems(priority){
+			let elementShowAvailableItems = document.getElementById('availableNumber');
+			let elementInputAvailableItems = document.getElementById('inputAvailable');
+			let elementAvItemsConst = [[${trainingService.getAvitems()}]];
+			
+			elementShowAvailableItems.value=elementShowAvailableItems.innerHTML;
+			elementInputAvailableItems.innerHTML=elementInputAvailableItems.value;
+			//too small
+			valMin(elementShowAvailableItems,elementInputAvailableItems,2);
+			//too large
+			valMax(elementShowAvailableItems,elementInputAvailableItems,elementAvItemsConst);
+		}
+		
+		function validateMaxItems(priority){
+			let elementShowMaxItems = document.getElementById('maxNumber');
+			let elementInputMaxItems = document.getElementById('inputMax');
+			let elementMaxItemsConst = [[${trainingService.getMaxitems()}]];
+			
+			elementInputMaxItems.innerHTML = elementInputMaxItems.value; 
+			elementShowMaxItems.value = elementShowMaxItems.innerHTML; 
+			
+			let elementShowMaxItemsDependency = document.getElementById('availableNumber').innerHTML;
+			let elementInputMaxItemsDependency = document.getElementById('inputAvailable').innerHTML;
+				
+			if(elementInputMaxItems.innerHTML==0){
+			
+						elementInputMaxItems.innerHTML=2;
+						elementInputMaxItems.value=2;
+						elementShowMaxItems.innerHTML=2;
+						elementShowMaxItems.value=2;
+			}		
+		
+			if(priority=='maxNumber'){
+				let avItemsT  = document.getElementById('availableNumber').innerHTML;
+				let avItemsC = [[${trainingService.getAvitems()}]];
+				
+				if( Number(elementShowMaxItems.innerHTML) >  Number(avItemsT) ){
+						
+					if ( Number(elementShowMaxItems.innerHTML) >   Number(avItemsC) ){
+						
+						document.getElementById('availableNumber').innerHTML=Number(avItemsC);
+						document.getElementById('availableNumber').value=Number(avItemsC);
+						document.getElementById('inputAvailable').innerHTML=Number(avItemsC);
+						document.getElementById('inputAvailable').value=Number(avItemsC);
+						
+					} else {
+						document.getElementById('availableNumber').innerHTML=Number(elementShowMaxItems.innerHTML);
+						document.getElementById('availableNumber').value=Number(elementShowMaxItems.innerHTML);
+						document.getElementById('inputAvailable').innerHTML=Number(elementShowMaxItems.innerHTML);
+						document.getElementById('inputAvailable').value=Number(elementShowMaxItems.innerHTML);
+					}
+				
+						valMin(elementShowMaxItems,elementInputMaxItems,2);
+						valMax(document.getElementById('maxNumber'),document.getElementById('inputMax'),Number(document.getElementById('availableNumber').innerHTML));			
+		
+				}
+			} else {
+				valMin(elementShowMaxItems,elementInputMaxItems,2);
+				valMax(elementShowMaxItems,elementInputMaxItems,elementShowMaxItemsDependency);			
+			}
+		}
+		
+		
+		function validateMinItems(priority){
+
+			var elementShowMinItems = document.getElementById('minNumber');
+			var elementInputMinItems = document.getElementById('inputMin');
+			var elementMinItemsConst = [[${trainingService.getMinitems()}]];
+			
+			let elementShowMaxItemsDependency = document.getElementById('maxNumber').innerHTML;
+			let elementInputMaxItemsDependency = document.getElementById('inputAvailable').innerHTML;
+			if(priority=='minNumber'){
+				let newMinItemsShow = elementShowMinItems;
+				let newMinItemsInput = elementInputMinItems;
+				let maxItemsShow = document.getElementById('maxNumber');
+				let maxItemsInput = document.getElementById('inputMax');
+				let avItemsShow = document.getElementById('availableNumber');
+				let avItemsInput = document.getElementById('inputAvailable');
+				let avItemsMaxConst = [[${trainingService.getAvitems()}]];
+				
+				document.getElementById('minNumber').value=document.getElementById('minNumber').innerHTML;	
+				document.getElementById('inputMin').innerHTML = document.getElementById('inputMin').value;
+				
+				document.getElementById('maxNumber').value=document.getElementById('maxNumber').innerHTML;
+				document.getElementById('inputMax').innerHTML = document.getElementById('inputMax').value;
+				
+				document.getElementById('availableNumber').value = document.getElementById('availableNumber').innerHTML;
+				document.getElementById('inputAvailable').innerHTML = document.getElementById('inputAvailable').value;
+			
+				if(Number(newMinItemsShow.innerHTML)>=Number(avItemsMaxConst)){					
+					document.getElementById('minNumber').innerHTML=Number(avItemsMaxConst);
+					document.getElementById('minNumber').value=Number(avItemsMaxConst);
+					document.getElementById('inputMin').innerHTML=Number(avItemsMaxConst);
+					document.getElementById('inputMin').value=Number(avItemsMaxConst);
+					
+					document.getElementById('availableNumber').innerHTML=Number(avItemsMaxConst);
+					document.getElementById('availableNumber').value=Number(avItemsMaxConst);
+					document.getElementById('inputAvailable').innerHTML=Number(avItemsMaxConst);
+					document.getElementById('inputAvailable').value=Number(avItemsMaxConst);
+					
+					document.getElementById('maxNumber').innerHTML=Number(avItemsMaxConst);
+					document.getElementById('maxNumber').value=Number(avItemsMaxConst);
+					document.getElementById('inputMax').innerHTML=Number(avItemsMaxConst);
+					document.getElementById('inputMax').value=Number(avItemsMaxConst);
+				}
+				
+				if(Number(newMinItemsShow.innerHTML)<Number(avItemsMaxConst) && Number(newMinItemsShow.innerHTML)>=Number(avItemsShow.innerHTML)) {				
+					document.getElementById('availableNumber').innerHTML=document.getElementById('minNumber').innerHTML;
+					document.getElementById('availableNumber').value=document.getElementById('minNumber').value;
+					document.getElementById('inputAvailable').innerHTML=document.getElementById('inputMin').innerHTML;
+					document.getElementById('inputAvailable').value=document.getElementById('inputMin').value;
+					
+					document.getElementById('maxNumber').innerHTML=document.getElementById('minNumber').innerHTML;
+					document.getElementById('maxNumber').value=document.getElementById('minNumber').value;
+					document.getElementById('inputMax').innerHTML=document.getElementById('inputMin').innerHTML;
+					document.getElementById('inputMax').value=document.getElementById('inputMin').value;
+				}
+				
+				if(Number(newMinItemsShow.innerHTML)<Number(avItemsShow.innerHTML) && Number(newMinItemsShow.innerHTML)>=Number(maxItemsShow.innerHTML)) {				
+					document.getElementById('maxNumber').innerHTML=document.getElementById('minNumber').innerHTML;
+					document.getElementById('maxNumber').value=document.getElementById('minNumber').value;
+					document.getElementById('inputMax').innerHTML=document.getElementById('inputMin').innerHTML;
+					document.getElementById('inputMax').value=document.getElementById('inputMin').value;
+				}
+				
+				if(Number(newMinItemsShow.innerHTML)<Number(maxItemsShow.innerHTML)) {
+			
+				}
+				
+				valMin(document.getElementById('minNumber'),document.getElementById('inputMin'),2);
+				valMax(document.getElementById('minNumber'),document.getElementById('inputMin'),document.getElementById('maxNumber').innerHTML);				
+			} else {
+				valMin(elementShowMinItems,elementInputMinItems,2);
+				valMax(elementShowMinItems,elementInputMinItems,elementShowMaxItemsDependency);				
+			}
+		}
+			
+		function validateMinSupport(priority){
+			var elementShowMinSupport = document.getElementById('supNumber');
+			var elementInputMinSupport = document.getElementById('inputSup');
+			var elementMinSupportConst = [[${trainingService.getMinsupport()}]];
+			document.getElementById('supNumber').value=document.getElementById('supNumber').innerHTML;
+			document.getElementById('inputSup').innerHTML=document.getElementById('inputSup').value;
+			if(priority=='supNumber'){				
+				let newMinSupportShow = document.getElementById('supNumber');;
+				let newMinSupportInput = document.getElementById('inputSup');;
+				let noTransShow = document.getElementById('transactionsNumber');;
+				let noTransInput = document.getElementById('inputTransactions');;
+				
+				let maxNoTransConst = [[${trainingService.getNotransactions()}]];
+			
+			document.getElementById('supNumber').value = document.getElementById('supNumber').innerHTML;
+			document.getElementById('inputSup').innerHTML = document.getElementById('inputSup').value;
+			document.getElementById('transactionsNumber').value = document.getElementById('transactionsNumber').innerHTML;
+			document.getElementById('inputTransactions').innerHTML = document.getElementById('inputTransactions').value;
+		
+				if(Number(newMinSupportShow.innerHTML)>Number(noTransShow.innerHTML)){
+					if(Number(newMinSupportShow.innerHTML)>=Number(maxNoTransConst)){
+						document.getElementById('supNumber').innerHTML = Number(maxNoTransConst);
+						document.getElementById('supNumber').value = Number(maxNoTransConst);
+						document.getElementById('inputSup').innerHTML = Number(maxNoTransConst);
+						document.getElementById('inputSup').value = Number(maxNoTransConst);
+						
+						document.getElementById('transactionsNumber').innerHTML=Number(maxNoTransConst);
+						document.getElementById('transactionsNumber').value=Number(maxNoTransConst);
+						document.getElementById('inputTransactions').innerHTML=Number(maxNoTransConst);
+						document.getElementById('inputTransactions').value=Number(maxNoTransConst);
+					} else {
+						document.getElementById('transactionsNumber').innerHTML=Number(newMinSupportShow.innerHTML);
+						document.getElementById('transactionsNumber').value=Number(newMinSupportShow.innerHTML);
+						document.getElementById('inputTransactions').innerHTML=Number(newMinSupportShow.innerHTML);
+						document.getElementById('inputTransactions').value=Number(newMinSupportShow.innerHTML);
+					}
+				valMin(elementShowMinSupport,elementInputMinSupport,2);
+				valMax(newMinSupportShow,newMinSupportInput,Number(document.getElementById('transactionsNumber').innerHTML));						
+				}
+			} 
+
+				valMin(document.getElementById('supNumber'),document.getElementById('inputSup'),2);
+				valMax(document.getElementById('supNumber'),document.getElementById('inputSup'),Number(document.getElementById('transactionsNumber').innerHTML));	
+		}
+		
+		function validateNoElementsRules(priority){
+
+
+			var elementShowNoElementsRules = document.getElementById('rulesNumbers');
+			var elementInputNoElementsRules = document.getElementById('inputRules');
+			var elementNoElementsRulesDependency = document.getElementById('transactionsNumber');
+			
+			elementShowNoElementsRules.value=elementShowNoElementsRules.innerHTML;
+			elementInputNoElementsRules.innerHTML=elementInputNoElementsRules.value;
+			valMin(elementShowNoElementsRules,elementInputNoElementsRules,2);
+			valMax(elementShowNoElementsRules,elementInputNoElementsRules,Number(elementNoElementsRulesDependency.innerHTML));
+		}
+		
+		function validateAskRules(priority){
+			var elementShowAskRules = document.getElementById('rulesNumbersAsk');
+			var elementInputAskRules = document.getElementById('inputRulesAsk');
+			var elementAskRulesConst = [[${trainingService.getAskrules()}]];
+			
+			elementShowAskRules.value = elementShowAskRules.innerHTML;
+			elementInputAskRules.innerHTML = elementInputAskRules.value;
+			valMin(elementShowAskRules,elementInputAskRules,2);
+			valMax(elementShowAskRules,elementInputAskRules,Number(elementAskRulesConst));
+		}
+		
+		function validateMinConfidence(priority){
+			var elementShow = document.getElementById('minConfPercent');
+			var elementInput = document.getElementById('inputMinConf');
+			var elementMinConfidenceConst = [[${trainingService.getMinconfidence()}]];
+
+			if(elementShow.innerHTML<0 || elementShow.innerHTML==0){
+				elementShow.innerHTML=0;
+				elementShow.value=0;
+				elementInput.innerHTML=0;
+				elementInput.value=0;
+				}
+												
+			if(elementShow.innerHTML>elementMinConfidenceConst){
+				elementShow.innerHTML=elementMinConfidenceConst;
+				elementShow.value=elementMinConfidenceConst;
+				elementInput.innerHTML=elementMinConfidenceConst;
+				elementInput.value=elementMinConfidenceConst;
+			}
+		}
+		
+		function validate(field){
+
+			var elementShowNoTransactions = document.getElementById('transactionsNumber');
+			var elementInputNoTransactions = document.getElementById('inputTransactions');
+			var elementNoTransactionsConst = [[${trainingService.getNotransactions()}]];
+
+
+			var elementShowMaxItems = document.getElementById('maxNumber');
+			var elementInputMaxItems = document.getElementById('inputMax');
+			var elementMaxItemsConst = [[${trainingService.getMaxitems()}]];
+		
+			var elementShowAvItems = document.getElementById('availableNumber');
+			var elementInputAvItems = document.getElementById('inputAvailable');
+			var elementAvItemsConst = [[${trainingService.getAvitems()}]];
+
+			if(field=='transactionsNumber'){
+				validateNoTransactions(field);
+				validateMinSupport(field);
+			}
+			
+			if(field=='availableNumber'){
+				validateAvailableItems(field);
+				validateMaxItems(field);
+				validateMinItems(field);
+			}
+			
+			if(field=='maxNumber'){
+				validateMaxItems(field);
+				validateMinItems(field);
+			}
+			
+			if(field=='minNumber'){
+				validateMinItems(field);
+			}
+
+
+			if(field=='supNumber'){
+				validateMinSupport(field);
+			}
+			
+			if(field=='rulesNumbers'){
+				validateNoElementsRules(field);
+			}
+			
+			if(field=='rulesNumbersAsk'){
+				validateAskRules(field);
+			}
+			
+			if(field=='minConfPercent'){
+				validateMinConfidence(field);
+			}
+		}
+
+    </script>
+</html>	

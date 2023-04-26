@@ -1,0 +1,154 @@
+h4 {
+	text-align: center;
+    font-family: "Segoe UI";
+    font-size: 1em;
+    text-transform: uppercase;
+    color: rgb(128, 128, 128);
+}
+
+.inputText{
+		text-align: center;
+    font-family: "Segoe UI";
+    font-size: 1em;
+    text-transform: uppercase;
+    color: rgb(128, 128, 128);
+}
+
+.standard {
+	text-align: center;
+    font-family: "Segoe UI";
+    text-transform: uppercase;
+    color: rgb(128, 128, 128);
+}
+
+
+table {
+  font-family: "Segoe UI";
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th, tr {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;  
+  border-left: 0px none;
+  border-right: 0px none;
+}
+
+tr:nth-child(even) {
+  background-color:  #f8f9f9  ;
+}
+
+.row:hover {
+  border: 2px solid rgb(64, 0, 64);
+  
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.24), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.hide {
+  display: none;
+}
+
+.param:hover + .hide {
+  display: block;
+  color: #839192;
+}
+
+.fieldNumberInput{
+		height:60px;
+    width:180px;
+    color: white;
+  background-color:  #839192 ; 
+  border: 1px solid  #f0f3f4 ;
+	text-align: center;
+	font-size: 30px;
+box-shadow: 3px 5px    #f0f3f4   ;
+  line-height: 1.9em; 
+  font-family: "Segoe UI";
+}
+
+.numbersField {
+	height:60px;
+    width:120px;
+  background-color: #0000FF; 
+  border: 1px solid  #d6eaf8 ;
+	text-align: center;
+	font-size: 30px;
+box-shadow: 3px 5px   #d6eaf8  ;
+   line-height: 0px; 
+   font-family: "Segoe UI";
+}
+
+
+/*style for side by side tables*/
+.full {
+  display:table;
+  width: 100%;
+}
+.left, .right {
+  display: table-cell;
+  width: 50%;
+  height: 200px;
+}
+.left { background-color: white;}
+.right { background-color: white;}
+
+.ruleBox{
+	display: block;
+	background-color: #f0f3f4; 
+	font-family: "Segoe UI";
+}
+
+.ruleBoxWrapper{
+		background-color: #f0f3f4; 
+		border: 1px solid rgb(128, 128, 128);
+		font-family: "Segoe UI";
+}
+
+.itemsCurrent{
+	  background-color: #f0f3f4; 
+	  border: 1px solid #f0f3f4; 
+	  color: black; 
+	  font-size: 25px;
+	  padding: 13px 24px; 
+	  cursor: pointer; 
+	  float: left;   
+	  font-family: "Segoe UI";
+}
+
+.supportCurrent{
+	  background-color: #f0f3f4; 
+	  border: 1px solid #f0f3f4; 
+	  color: black; 
+	  font-size: 25px;
+	  padding: 13px 24px; 
+	  cursor: pointer; 
+	  float: none;   
+	  font-family: "Segoe UI";
+}
+
+.clear {
+    clear:both;
+}
+
+.buttonItem {
+  background-color: #839192; 
+  border: 1px solid  #f0f3f4 ;
+  color: white;
+  padding: 10px 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  text-align: center;  
+   font-family: "Segoe UI";
+}
+
+.buttonItem:hover {
+  background-color: #f0f3f4;
+  color: rgb(64, 0, 64);
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.24), 0 6px 20px 0 rgba(0,0,0,0.19);
+}

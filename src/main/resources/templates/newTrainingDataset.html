@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori training</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+	
+	<body>
+		<th:block th:insert="fragments/headerFooter :: trainingHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Training Dataset')"/>
+		
+		<div align="center">
+			<p class="standard" th:text="'Freuquent pattern for deriving rules: '+${#strings.arrayJoin(fp, ', ')}"></p>
+			<p class="standard"> Total number of possible rules from pattern: [[${totalNumberOfRules}]]</p>
+			<p class="standard"> Number of rules queried in the second task: [[${askRulesLevelT}]]</p>
+		</div>
+		
+		<th:block th:insert="fragments/tables :: datasetTable"/>
+		
+		<form action="#" th:action="@{/newTrainingDataset}">
+			<input hidden type="text" th:name="trainingProcessNo" th:value=${trainingProcessNo}>
+		 	<input hidden type="text" th:name="difficultyLevel" th:value=${difficultyLevel}>
+		 	
+			<input hidden type="number" th:name="noTransactionsLevel" th:value=${noTransactionsLevel}>
+			<input hidden  type="number" th:name="avItemsLevel"  th:value=${avItemsLevel}>
+			<input hidden  type="number" th:name="maxItemsLevel" th:value=${maxItemsLevel}>
+			<input hidden  type="number" th:name="minItemsLevel" th:value=${minItemsLevel}>
+			<input  hidden type="text"  th:name="types"  th:value=${types}>
+			<input hidden  type="number" th:name="minSupportLevel" th:value=${minSupportLevel}>
+			<input hidden  type="number"  th:name="noRulesLevel" th:value=${noRulesLevel}>
+			<input hidden  type="number"  th:name="askRulesLevel" th:value=${askRulesLevel}>
+			<input hidden  type="number"  th:name=" minConfidenceLevel" th:value=${minConfidenceLevel}>
+			<br/>	
+			<table>
+				<tr>
+					<td style="text-align: center; border-style: hidden;">
+						<button class="buttonNumber"style="width:100%;" type="submit" >Generate new dataset with <b>same</b> parameters</button> 
+					</td>
+		</form>
+					<td style="text-align: center;border-style: hidden;">
+						<form th:action="@{/newTrainingSetup}">
+							<input hidden type="text" th:name="trainingProcessNo" th:value=${trainingProcessNo}>
+		    				<button class="buttonNumber" style="width:100%;" type="submit" >Generate new dataset with <b>new</b> parameters</button> 
+						</form>	
+					</td>
+			</table>
+		<form action="#" th:action="@{/aprioriTraining}">
+			<input hidden type="text" th:name="trainingProcessNo" th:value=${trainingProcessNo}>
+		    <button class="buttonNumber" style="width: 100%; margin:auto;display:block;" type="submit" ><b>Start</b> training</button> 
+		</form>
+		
+		</br></br></br>
+		
+		<th:block th:insert="fragments/headerFooter :: footer"/>
+	
+	</body>
+</html>			
+		

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori exercise</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+	
+	<body th:onload="showCalc();">
+	
+		<th:block th:insert="fragments/headerFooter :: exerciseHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Exercise Apriori Evaluation')"/>
+		
+		<br/>
+		<h4>
+			The feedback level for your task difficulty is: <b>[[${exerciseService.feedbackLevel}]]</b>
+		</h4>
+		<div class=".clear"></div>		
+
+			<div th:if="${exerciseService.feedbackLevel==1}"  align="center" th:id="flevel1">
+		
+			<div align="center" th:id="holisticOk">				
+				<h4 align="center">Feedback (level 1): </h4>				
+				<p style="font-family: 'Segoe UI';"> Level 1 shows whether the apriori task is completely right or wrong</p>
+				<br/>
+				
+				<table align="center">
+					<thead>
+						<tr>
+							<th style="text-align: center;">Apriori Task Ok</th>
+						</tr>
+					</thead>								
+					<tbody>
+						<tr>
+							<td style="text-align: center;">
+				        		<span th:if="${exerciseService.allCorrect() == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${exerciseService.allCorrect()}"></span>
+								<span th:if="${exerciseService.allCorrect() == 'no'}" style="color:rgb(255, 0, 0)" th:text="${exerciseService.allCorrect()}"></span>
+				        	</td>
+						</tr>
+					</tbody>
+				</table>					
+			</div>		
+				
+			</div>
+			
+			<div th:if="${exerciseService.feedbackLevel==2}"  align="center" th:id="flevel2">
+		
+			<div align="center"	>					
+					<h4 align="center">Feedback (level 2): </h4>					
+					<p style="font-family: 'Segoe UI';"> Level 2 shows whether the individual interim results (entire tables) and the frequent items (entire table) are correct or incorrect</p>	
+				
+				<div class="full"  th:id="tableOk">
+		    		<div class="left" >
+						</br>
+						<h4 align="center">Interim Results:</h4>					
+						<div th:if="${exerciseService.correctionList.size()==0}" >
+						
+							<table align="center" style="width:30%;">
+								<thead>
+									<tr>
+										<th style="text-align: center;">InterimTablesOK</th>
+									</tr>
+								</thead>											
+								<tbody>
+									<tr>
+										<td style="text-align: center;"> 		
+											<span th:if="${exerciseService.allCorrect() == 'no'}" style="color:rgb(255, 0, 0)" th:text="${exerciseService.allCorrect()}"></span>
+							        	</td>
+									</tr>
+								</tbody>
+							</table>								
+						</div>					
+						
+						<div th:if="${exerciseService.correctionList.size()!=0}" >
+					
+							<table >
+					    		<thead>
+							      	<tr> 
+							        	<th>ID </th>
+							        	<th>InterimResult</th>
+										<th style="text-align: right;">Table OK</th>
+							      	</tr>
+						    	</thead>
+								<tbody>
+						      		<tr th:each="corretionTable : ${exerciseService.correctionList}" th:field="${corretionTable}">
+										<td th:text="${corretionTable.id}"></td>   
+						      			<td style="text-align: left;"> 
+						      		
+											<table >
+											    <thead>
+											    	<tr> 
+											        	<th>Items</th>
+											        	<th>Support Count</th>	
+											       	</tr>
+											    </thead>
+										        <tbody>
+													<tr th:each="correctionRow : ${corretionTable.row}" th:field="${corretionTable.row}">
+										        		<td>
+															<div th:text="${#strings.arrayJoin(correctionRow.itemsTraining, ', ')}"></div>
+														</td>
+														<td th:text="${correctionRow.supportCountTraining}"></td>
+										       		</tr>
+										       	</tbody>
+											</table>
+										
+						        		</td>
+						        		<td >
+						        			<span th:if="${corretionTable.correct == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${corretionTable.correct}"></span>
+						        			<span th:if="${corretionTable.correct == 'no'}" style="color:rgb(255, 0, 0)" th:text="${corretionTable.correct}"></span>
+						        		</td>
+						      		</tr>
+								</tbody>
+							</table>
+						</div>					
+			    	</div>		
+					<div class="right" >
+						</br>
+						<h4 align="center">Frequent Items:</h4>
+											
+						<table align="center">
+							<thead>
+								<tr>
+									<th style="text-align: center;">Table Ok</th>
+								</tr>
+							</thead>					
+							<tbody>
+								<tr>
+									<td style="text-align: center;">
+						        		<span th:if="${exerciseService.getFrequentTableCorrect() == 'yes'}" style="color:rgb(0, 128, 0);text-align: center;" th:text="${exerciseService.getFrequentTableCorrect()}"></span>
+						        		<span th:if="${exerciseService.getFrequentTableCorrect() == 'no'}" style="color:rgb(255, 0, 0);text-align: center;" th:text="${exerciseService.getFrequentTableCorrect()}"></span>								 	
+									</td>
+								</tr>
+							</tbody>
+						</table>
+								
+					</div>												
+			    </div>
+			</div>
+		</div>
+
+		<div th:if="${exerciseService.feedbackLevel==3}"  align="center" th:id="flevel3">
+			
+			<div align="center"	>			
+				<h4 align="center">Feedback (level 3): </h4>
+				<p style="font-family: 'Segoe UI';"> Level 3 shows whether the items are correct or incorrect for the individual interim results and for the frequent items</p>
+				
+				<div class="full"  th:id="rowOk">
+			    	<div class="left">
+						</br>
+						<h4 align="center">Interim Results:</h4>
+						
+						<table >
+						    <thead>
+						      <tr> 
+						        <th>ID</th>
+						        <th>InterimResult</th>
+						      </tr>
+						    </thead>
+							<tbody>
+							
+							
+					      <tr th:if="${exerciseService.getCorrectionList().size()==0}">
+					      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>
+					      						      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>
+					      </tr>							
+							
+						      <tr 
+						      th:if="${exerciseService.getCorrectionList().size()!=0}"
+						      th:each="corretionTable : ${exerciseService.correctionList}" th:field="${corretionTable}">
+						       	<td th:text="${corretionTable.id}"></td>   
+								<td> 								
+									<table >
+										<thead>
+											<tr> 
+												<th>Items</th>
+										        <th>Support Count</th>
+										        <th>Row Ok</th>			
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="correctionRow : ${corretionTable.row}" th:field="${corretionTable.row}">
+												<td>
+													<div th:text="${#strings.arrayJoin(correctionRow.itemsTraining, ', ')}"></div>
+												</td>
+												<td th:text="${correctionRow.supportCountTraining}"></td>
+												<td>
+													<span th:if="${correctionRow.itemsCorrect == 'yes' and correctionRow.supportCorrect == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${correctionRow.itemsCorrect}"></span>
+													<span th:if="${correctionRow.itemsCorrect == 'no' or correctionRow.supportCorrect == 'no'}" style="color:rgb(255, 0, 0)" th:text="'no'"></span>
+												</td>
+									       	</tr>
+										</tbody>
+									</table>
+									
+						        </td>
+						      </tr>
+							</tbody>
+						</table>
+						
+			    	</div>		
+					<div class="right">
+						</br>
+						<h4 align="center">Frequent Items:</h4>
+						
+						<table align="center">
+							<thead>
+								<tr>
+									<th>Support Count</th>
+									<th>Items</th>
+									<th>Row Ok</th>
+								</tr>
+							</thead>
+							<tbody>  
+							
+							
+							<tr 
+							th:if="${exerciseService.getFrequentTableCorretion().size()==0}">
+								
+								<td>
+						 			<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+								</td>
+																<td>
+						 			<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+								</td>
+																<td>
+						 			<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+								</td>
+							</tr>							
+							
+								<tr 
+								th:if="${exerciseService.getFrequentTableCorretion().size()!=0}"
+								th:each="frequentRow : ${exerciseService.getFrequentTableCorretion()}" th:field="${frequentRow}">
+									<td th:text="${frequentRow.count}"></td>
+									<td>
+										<div th:text="${#strings.arrayJoin(frequentRow.items, ', ')}"></div>
+									</td>
+									<td >
+										<span th:if="${frequentRow.countOK == 'yes' and frequentRow.itemsOK == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${frequentRow.countOK}"></span>
+										<span th:if="${frequentRow.countOK == 'no' or frequentRow.itemsOK == 'no'}" style="color:rgb(255, 0, 0)" th:text="'no'"></span>
+									</td>
+							</tbody>	
+						</table>
+							
+					</div>	
+				</div>
+			</div>		
+		</div>
+	
+		<div th:if="${exerciseService.feedbackLevel==4}"  align="center" th:id="flevel4">
+	
+			<div align="center">
+				<h4 align="center">Feedback (level 4): </h4>
+				<p style="font-family: 'Segoe UI';"> Level 4 shows whether the items and the support count are correct or incorrect for the individual interim results and for the frequent items</p>				
+				<div class="full"  th:id="elementOk">
+
+			    	<div class="left">
+						</br>
+						<h4 align="center">Interim Results:</h4>
+						
+						<table >
+						    <thead>
+						      <tr> 
+						        <th>ID</th>
+						        <th>InterimResult</th>
+						      </tr>
+						    </thead>
+							<tbody>
+							
+						<tr th:if="${exerciseService.getCorrectionList().size()==0}">
+					      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>
+					      						      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>
+					      						      	</td>
+					      </tr>							
+
+								<tr 
+								th:if="${exerciseService.getCorrectionList().size()!=0}"
+								th:each="corretionTable : ${exerciseService.correctionList}" th:field="${corretionTable}">
+									<td th:text="${corretionTable.id}"></td> 
+						      		<td> 
+						   	
+									<table >
+										<thead>
+											<tr> 
+												<th>Items</th>
+												<th>Support Count</th>
+												<th>Items Ok</th>
+												<th>Support Count OK</th>
+											</tr>
+											</thead>
+									  		<tbody>
+												<tr th:each="correctionRow : ${corretionTable.row}" th:field="${corretionTable.row}">
+									        		<td>
+														<div th:text="${#strings.arrayJoin(correctionRow.itemsTraining, ', ')}"></div>
+													</td>
+													<td th:text="${correctionRow.supportCountTraining}"></td>
+													<td>
+														<span th:if="${correctionRow.itemsCorrect == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${correctionRow.itemsCorrect}"></span>
+														<span th:if="${correctionRow.itemsCorrect == 'no'}" style="color:rgb(255, 0, 0)" th:text="${correctionRow.itemsCorrect}"></span>
+													</td>
+													<td >
+														<span th:if="${correctionRow.supportCorrect == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${correctionRow.supportCorrect}"></span>
+														<span th:if="${correctionRow.supportCorrect == 'no'}" style="color:rgb(255, 0, 0)" th:text="${correctionRow.supportCorrect}"></span>
+													</td>
+												</tr>
+									       	</tbody>
+										</table>
+										
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						
+			    	</div>		
+					<div class="right">
+						</br>
+						<h4 align="center">Frequent Items:</h4>
+						
+						<table align="center">
+							<thead>
+								<tr>
+									<th>Support Count</th>
+									<th>Items</th>
+									<th>Support Count OK</th>
+									<th>Items OK</th>
+								</tr>
+							</thead>
+							<tbody> 
+							
+						<tr th:if="${exerciseService.getFrequentTableCorretion().size()==0}">
+					      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>
+					      						      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>
+					      						      						      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>					      
+										      						      	<td>
+					      	<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+					      	</td>
+					      </tr>							
+							
+								<tr 
+								th:if="${exerciseService.getFrequentTableCorretion().size()!=0}"
+								th:each="frequentRow : ${exerciseService.getFrequentTableCorretion()}" th:field="${frequentRow}">
+									<td th:text="${frequentRow.count}"></td>
+									<td>
+										<div th:text="${#strings.arrayJoin(frequentRow.items, ', ')}"></div>
+									</td>
+									<td >
+										<span th:if="${frequentRow.countOK == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${frequentRow.countOK}"></span>
+										<span th:if="${frequentRow.countOK == 'no'}" style="color:rgb(255, 0, 0)" th:text="${frequentRow.countOK}"></span>
+									</td>
+									<td >
+										<span th:if="${frequentRow.itemsOK == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${frequentRow.itemsOK}"></span>
+										<span th:if="${frequentRow.itemsOK == 'no'}" style="color:rgb(255, 0, 0)" th:text="${frequentRow.itemsOK}"></span>
+									</td>
+							</tbody>		
+						</table>	
+						
+					</div>	
+		    	</div>
+			</div>
+		
+		</div>
+			
+		</br></br>
+		<table>
+			<tr>
+				<td style="text-align: center; border-style: hidden;">
+					<button class="buttonNumber" style="width:50%;" th:onclick="showCalc();"><b>Calculation</b> result</button> 
+				</td>
+			</tr>
+		</table>
+		
+		<th:block>
+			
+		<div class="full" align="center" th:id="calc">
+			<h4 align="center">Calculation result: </h4>
+		   	<div class="left">				
+				<h4 align="center">Points for apriori task:</h4>
+	
+				<table >
+				    <thead>
+						<tr> 
+				        	<th>Points for</th>
+				        	<th>Amount</th>
+						</tr>
+				    </thead>
+					<tbody>
+						<tr><td style="text-align: center;"><b>Interim results:</b></td></tr>
+						<tr >
+							<td>
+									Points for right interim items in row
+							</td>
+							<td>
+									[[${points.countViableItemsInterTwoDecimals}]]
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Points for right support count for interim row (only if interim items are correct)
+							</td>
+							<td>
+									[[${points.countViableSupInterTwoDecimals}]]
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Penalty for wrong interim row
+							</td>
+							<td>
+									[[${points.countMalRowInterTwoDecimals}]]
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Penalty for forgotten interim row
+							</td>
+							<td>
+									[[${points.countForgottenInterTwoDecimals}]]
+							</td>
+						</tr>
+						
+						<tr >
+							<td>
+									<i>Sum points interim results</i>
+							</td>
+							<td th:with="sumInterim=${points.countViableItemsInter+points.countViableSupInter+points.countMalRowInter+points.countForgottenInter} ">
+									[[${points.sumInterimTwoDecimals}]]
+							</td>
+						</tr>
+						<tr><td style="text-align: center;"><b>Frequent pattern:</b></td></tr>
+						<tr >
+							<td>
+									Points for right frequent items in row
+							</td>
+							<td>
+									[[${points.countViableItemsFreqTwoDecimals}]]
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Points for right support count in frequent items row
+							</td>
+							<td>
+									[[${points.countViableSupFreqTwoDecimals}]]
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Penalty for wrong frequent items row
+							</td>
+							<td>
+									[[${points.countMalRowFreqTwoDecimals}]]
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Penalty for forgotten frequent items row
+							</td>
+							<td>
+									[[${points.countForgottenFreqTwoDecimals}]]
+							</td>
+						</tr>
+						
+						<tr >
+							<td>
+									<i>Sum points frequent pattern</i>
+							</td>
+							<td th:with="sumFrequent=${points.countViableItemsFreq+points.countViableSupFreq+points.countMalRowFreq+points.countForgottenFreq} ">
+									[[${points.sumFrequentTwoDecimals}]]
+							</td>
+						</tr>
+						<tr><td style="text-align: center;"><b>Sum:</b></td></tr>	
+						<tr >
+							<td>
+									<i>Sum points for apriori task:</i>
+							</td>
+							<td>
+									[[${points.sumTwoDecimals}]]
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+		    </div>		
+			<div class="right">
+				<h4 align="center">Points for association rules:</h4>
+					
+				<table align="center">
+					<thead>
+						<tr>
+							<th>Points for</th>
+							<th>Amount</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="text-align: center;">
+								<b>Association rules:</b>
+							</td>
+						</tr>
+						<tr >
+							<td>
+									<i>(next task)</i>
+							</td>
+							<td>
+									<i>(na)</i>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<b>Sum:</b>
+							</td>
+						</tr>	
+						<tr >
+							<td>
+									<i>Sum points for association rules task:</i>
+							</td>
+							<td>
+									<i>(na)</i>
+							</td>
+						</tr>
+					</tbody>
+					</table>	
+					
+				</div>	
+	    	</div>
+		</th:block>		
+		</br></br></br>
+		<h5 align="center" style="font-family: sans-serif;font-size: 1em;"> Result overall:  [[${points.sumTwoDecimals}]] points</h5>
+		<h4 align="center" style="font-family: sans-serif;font-size: 0.8em;"> (Maximum number of points for both tasks:  [[${exerciseService.maxPoints}]])</h4>
+		</br></br></br>
+		<div>	
+			<table>
+				<tr>
+					<td style="text-align: center; border-style: hidden;">
+						<form th:action="@{/restartExerciseApriori}">
+							<input hidden type="text" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo} >
+							<button class="buttonNumber" style="width:100%;" type="submit"><b>Redo</b> task</button>
+						</form> 
+					</td>
+					<td style="text-align: center;border-style: hidden;">
+						<form th:action="@{/rulesExercise}">
+							<input hidden type="text" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo} >
+		    				<button class="buttonNumber" style="width:100%;" type="submit">Start <b>rules</b> task</button> 
+					</td>
+				</tr>
+			</table>
+			
+		</div>	
+
+		</br></br>
+
+		<th:block th:insert="fragments/headerFooter :: footer"/>		
+	
+	</body>	
+	
+	<script  th:inline="javascript">
+
+		function showCalc(){
+			if (document.getElementById('calc').style.display === "none") {
+				document.getElementById('calc').style.display = "block";
+				} else {
+				document.getElementById('calc').style.display = "none";
+				}
+		}
+
+	</script>
+	
+</html>

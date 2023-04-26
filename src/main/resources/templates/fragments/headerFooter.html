@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head th:fragment="head">
+<meta charset="ISO-8859-1">
+	<title>Apriori</title>
+	<link th:href="@{/css/headerFooterStyle.css}" rel="stylesheet" />
+</head>
+
+<body>
+	
+	<th:block th:fragment="header(subtitle)">
+	 	<link rel="stylesheet" href="css/headerFooterStyle.css"> 
+		<h2 th:text="Apriori"/>
+		<h3 th:text="${subtitle}"/>
+	</th:block>
+	
+	<th:block th:fragment="footer">
+	 	<link rel="stylesheet" href="css/headerFooterStyle.css"> 
+		<div class="footer">
+			<hr>
+			eTutor++<span style="font-size: 0.7em;">AprioriExtension</span>
+		</div>
+	</th:block>
+	
+	<th:block th:fragment="trainingHeaderTopMenue">
+		<ul class="navbar-horizontal-ul">
+			<li class="navbar-horizontal-li-left">
+				<a class="navbar-brand" th:href="${trainingService.getLinketutor()}">
+					<span class="logo-img" > <img style="width:60px;height:30px; padding-top: 15px;padding-left: 5px; " th:src="@{img/jku_logo.png}" > </img> </span>
+					<span class="navbar-title" > eTutor++</span> <span class="navbar-version" style="font-size:0.8em;">E</span><span class="navbar-version"  style="font-size:0.6em;">XTENSION</span>
+				</a>
+			<span th:id="warning" style="padding-top: 20px; text-align: right;color: #ccc;">
+				&emsp;The extension uses JavaScript!
+				Please, do not use the browser`s back button!
+			</span>
+			</li>
+	  		<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+	  			<a class="navbar-horizontal-li-a" th:href="@{/endExtension}+'?trainingProcessNo='+${trainingService.trainingProcessNo}">
+	  				<span class="icon" style="background-image: url('img/bye16x16.png');float: left;"></span> 
+	  				&nbsp;&nbsp;End training 
+	  			</a>
+	  		</li>
+			<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+				<a class="navbar-horizontal-li-a" th:href="@{/startNewTrainingSetup}+'?trainingProcessNo='+${trainingService.trainingProcessNo}">
+					<span class="icon" style="background-image: url('img/home16x16.png');float: left;"></span> 
+					&nbsp;&nbsp;Restart training 
+				</a>
+			</li>
+		</ul>	
+		<hr style=" color: #ccc;opacity:0.2;font-size: 1px;">
+		<script  th:inline="javascript">
+			const infoTimeout = setTimeout(info, 5000);
+			function info() {
+	  			document.getElementById("warning").innerHTML = ""
+			}
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="adminHeaderTopMenue">
+		<ul class="navbar-horizontal-ul">
+			<li class="navbar-horizontal-li-left">
+				<a class="navbar-brand" th:href="${adminService.getLinketutor()}">
+				
+					<span class="logo-img" > <img style="width:60px;height:30px; padding-top: 15px;padding-left: 5px; " th:src="@{img/jku_logo.png}" > </img> </span>
+					<span class="navbar-title" > eTutor++</span> <span class="navbar-version" style="font-size:0.8em;">E</span><span class="navbar-version"  style="font-size:0.6em;">XTENSION</span>
+				</a>
+			<span th:id="warning" style="padding-top: 20px; text-align: right;color: #ccc;">
+				&emsp;The extension uses JavaScript!
+				Please, do not use the browser`s back button!
+			</span>
+			</li>
+	  		<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+	  			<a class="navbar-horizontal-li-a" th:href="@{/endAdminExtension}+'?adminProcessNo='+${adminService.adminProcessNo}">
+	  				<span class="icon" style="background-image: url('img/bye16x16.png');float: left;"></span> 
+	  				&nbsp;&nbsp;End 
+	  			</a>
+	  		</li>
+	  		<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+	  			<a class="navbar-horizontal-li-a" th:href="@{/tables}+'?adminProcessNo='+${adminService.adminProcessNo}">
+	  				<span class="icon" style="background-image: url('img/bucher.png');float: left;"></span> 
+	  				&nbsp;&nbsp;Storage 
+	  			</a>
+	  		</li> 		
+			<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+				<a class="navbar-horizontal-li-a" th:href="@{/restartCreate}+'?adminProcessNo='+${adminService.adminProcessNo}">
+					<span class="icon" style="background-image: url('img/home16x16.png');float: left;"></span> 
+					&nbsp;&nbsp;Restart
+				</a>
+			</li> 
+		</ul>	
+		<hr style=" color: #ccc;opacity:0.2;font-size: 1px;">	
+		<script  th:inline="javascript">
+			const infoTimeout = setTimeout(info, 5000);
+			function info() {
+	  			document.getElementById("warning").innerHTML = ""
+			}
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="adminHeaderTopMenueStored">
+		<ul class="navbar-horizontal-ul">
+			<li class="navbar-horizontal-li-left">
+				<a class="navbar-brand" th:href="${adminService.getLinketutor()}">
+					<span class="logo-img" > <img style="width:60px;height:30px; padding-top: 15px;padding-left: 5px; " th:src="@{img/jku_logo.png}" > </img> </span>
+					<span class="navbar-title" > eTutor++</span> <span class="navbar-version" style="font-size:0.8em;">E</span><span class="navbar-version"  style="font-size:0.6em;">XTENSION</span>
+				</a>
+				<span th:id="warning" style="padding-top: 20px; text-align: right;color: #ccc;">
+					&emsp;The extension uses JavaScript!
+					Please, do not use the browser`s back button!
+				</span>
+			</li>
+	  		<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+	  			<a class="navbar-horizontal-li-a" th:href="@{/endAdminExtension}+'?adminProcessNo='+${adminService.adminProcessNo}">
+	  				<span class="icon" style="background-image: url('img/bye16x16.png');float: left;"></span> 
+	  				&nbsp;&nbsp;End 
+	  			</a>
+	  		</li>
+			<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+				<a class="navbar-horizontal-li-a" th:href="@{/restartTables}+'?adminProcessNo='+${adminService.adminProcessNo}">
+					<span class="icon" style="background-image: url('img/home16x16.png');float: left;"></span> 
+					&nbsp;&nbsp;Restart 
+				</a>
+			</li> 
+		</ul>
+		<hr style=" color: #ccc;opacity:0.2;font-size: 1px;">
+		<script  th:inline="javascript">
+			const infoTimeout = setTimeout(info, 5000);
+			function info() {
+	  			document.getElementById("warning").innerHTML = ""
+			}
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="exerciseHeaderTopMenue">
+		<ul class="navbar-horizontal-ul">
+			<li class="navbar-horizontal-li-left">
+				<a class="navbar-brand" th:href="${exerciseService.getLinketutor()}">
+					<span class="logo-img" > <img style="width:60px;height:30px; padding-top: 15px;padding-left: 5px; " th:src="@{img/jku_logo.png}" > </img> </span>
+					<span class="navbar-title" > eTutor++</span> <span class="navbar-version" style="font-size:0.8em;">E</span><span class="navbar-version"  style="font-size:0.6em;">XTENSION</span>
+				</a>
+				<span th:id="warning" style="padding-top: 20px; text-align: right;color: #ccc;">
+					&emsp;The extension uses JavaScript!
+					Please, do not use the browser`s back button!
+				</span>
+			</li>
+	  		<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+	  			<a class="navbar-horizontal-li-a" th:href="@{/endExerciseExtension}+'?exerciseProcessNo='+${exerciseService.exerciseProcessNo}">
+	  				<span class="icon" style="background-image: url('img/bye16x16.png');float: left;"></span> 
+	  				&nbsp;&nbsp;End  
+	  			</a>
+	  		</li> 		
+			<li class="navbar-horizontal-li-right" style="padding-top: 20px; ">
+				<a class="navbar-horizontal-li-a" th:href="@{/restartExerciseApriori}+'?exerciseProcessNo='+${exerciseService.exerciseProcessNo}">
+					<span class="icon" style="background-image: url('img/home16x16.png');float: left;"></span> 
+					&nbsp;&nbsp;Restart  
+				</a>
+			</li> 
+		</ul>
+		<hr style=" color: #ccc;opacity:0.2;font-size: 1px;">
+		<script  th:inline="javascript">
+			const infoTimeout = setTimeout(info, 5000);
+			function info() {
+	  			document.getElementById("warning").innerHTML = ""
+			}
+		</script>
+	</th:block>
+</body>
+
+</html>

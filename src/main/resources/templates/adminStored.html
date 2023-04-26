@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori admin</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+	</head>
+	
+	<body>
+	
+		<th:block th:insert="fragments/headerFooter :: adminHeaderTopMenueStored"/>
+		<th:block th:insert="fragments/headerFooter :: header('Stored Records')"/>
+
+		<table align="center" >
+			<thead>
+			  <tr>
+			    <th>Datasets name</th>
+			    <th>Datasets ID </th>
+			    <th> </th>
+			    <th> </th>
+			  </tr>
+			</thead>
+			<tbody>   
+				<tr th:each="l : ${datasetList}" th:field="${l}">
+			        <td th:text="${l.comment}"></td>
+		  			<td th:text="${l.uuid_ht}"></td>
+		  			<td>
+						<form action="#" th:action="@{/taskConfigs}"> 
+							<input hidden type="text" class="buttonTextInput"  th:name="adminProcessNo"  th:id="iduuid" th:value="${adminService.getAdminProcessNo()}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="idDataset"  th:id="iduuid" th:value="${l.uuid_ht}" />
+							<button  class="buttonNumber" style="width:120px;" type="submit" >Task Configs</button> 
+						</form>	
+					</td>
+					<td>
+						<form action="#" th:action="@{/loadStoredDataset}"> 
+							<input hidden type="text" class="buttonTextInput"  th:name="adminProcessNo"   th:value="${adminService.getAdminProcessNo()}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="uuid_ds"  th:id="uuid_dsI" th:value="${l.uuid_ht}" />	
+							<button  class="buttonNumber" style="width:120px;" type="submit" >View</button> 
+						</form>	
+					</td>
+					<td>
+						<form action="#" th:action="@{/deleteDataset}"> 
+							<input hidden type="text" class="buttonTextInput"  th:name="adminProcessNo"   th:value="${adminService.getAdminProcessNo()}" />
+							<input hidden type="text" class="buttonTextInput"  th:name="idDataset"  th:id="id" th:value="${l.uuid_ht}" />
+							<button  class="buttonNumber" style="width:120px;" type="submit" >Delete</button> 
+						</form>	
+					</td>
+	      		</tr>
+		    </tbody>
+		</table>
+		
+		</br></br></br>
+
+		<th:block th:insert="fragments/headerFooter :: footer"/>	
+		
+	</body>
+</html>

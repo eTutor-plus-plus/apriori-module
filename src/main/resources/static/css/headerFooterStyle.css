@@ -1,0 +1,101 @@
+
+h2 {
+	text-align: center;
+    font-family: "Segoe UI";
+    font-size: 2em;
+    text-transform: uppercase;
+    color: rgb(87, 87, 87);
+}
+
+h3 {
+	text-align: center;
+    font-family: "Segoe UI";
+    font-size: 1.5em;
+    text-transform: uppercase;
+    color: rgb(128, 128, 128);
+}
+
+hr {
+  border-top: 1px solid rgb(128, 128, 128);
+}
+
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   font-family: "Segoe UI";
+   color: rgb(128, 128, 128);  
+   text-align: left;
+   z-index: -10;
+   opacity:0.3;
+   text-transform: none;
+   font-size: 0.8em;
+}
+
+.navbar-horizontal-ul{
+	  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgb(255, 255, 255);
+}
+.navbar-horizontal-li-left{
+	float: left;
+}
+.navbar-horizontal-li-right{
+	float: right;
+}
+.navbar-horizontal-li-a {
+  display: block;
+  padding: 8px;
+  font-family: "Segoe UI";
+  text-decoration:none;
+  color:rgb(159, 159, 159);
+}
+/* ==========================================================================
+Logo styles (from eTutor++)
+========================================================================== */
+.logo-img {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+  vertical-align: middle;
+  background-size: contain;
+  
+}
+
+.navbar-version {
+  font-size: 0.65em;
+  color: #ccc;
+}
+
+.navbar-title {
+	font-family:  "Segoe UI";
+	padding-left: 5px;
+  font-size: 1.015625rem;
+  color: rgb(64, 0, 64);
+  
+ 
+}
+
+.navbar-brand {
+	font-family: "Segoe UI";
+  display: inline-block;
+  padding-top: 0.74765625rem;
+  padding-bottom: 0.74765625rem;
+  margin-right: 1rem;
+  font-size: 1rem;
+  line-height: inherit;
+  white-space: nowrap;
+  text-decoration:none;
+}
+
+.icon {
+    height: 16px;
+    width: 16px;
+    background-size: contain;
+    display: block;
+    
+  
+}

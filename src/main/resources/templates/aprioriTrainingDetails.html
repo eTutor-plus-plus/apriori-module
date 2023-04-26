@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori training</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+	
+	<body>
+		
+		<th:block th:insert="fragments/headerFooter :: trainingHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Students Training Detailed Solution')"/>
+	
+		</br>
+		<h4 align="center">Dataset:</h4>
+		
+		<table align="center">
+			<thead>
+			  <tr>
+			    <th>TransactionID</th>
+			    <th>Items</th>
+			  </tr>
+			</thead>
+			<tbody>   
+				<tr th:each="row : ${apriori.associationDataSet.rows}" th:field="${row}">
+			        <td th:text="${row.indicator}"></td>
+			        <td>
+						<div th:text="${#strings.replace(#strings.replace(	#strings.arrayJoin(row.itemset, ', ')	,'[',''),']','')}"></div>
+					</td>
+	      		</tr>
+		    </tbody>
+		</table>	
+	
+		</br>
+		<h4 align="center">Interim Results:</h4>
+			
+		<table align="center">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Interim Result</th>
+				</tr>
+			</thead>
+			<tbody>  
+				<tr th:each="listir : ${apriori.getInterimResultsStorage}" th:field="${listir}">
+					<td>
+						<div th:if="${#strings.containsIgnoreCase(listir.id,'raw')}">[[${#strings.substringBefore(listir.id,'raw')+': Start'}]]</div>
+						<div th:if="${#strings.containsIgnoreCase(listir.id,'counted')}">[[${#strings.substringBefore(listir.id,'counted')+': Support counted'}]]</div>
+						<div th:if="${#strings.containsIgnoreCase(listir.id,'lowSupportMarker')}">[[${#strings.substringBefore(listir.id,'lowSupportMarker')+': Minimum support checked'}]]</div>
+						<div th:if="${#strings.containsIgnoreCase(listir.id,'pruned')}">[[${#strings.substringBefore(listir.id,'pruned')+': Items below minimum support pruned'}]]</div>
+					</td>
+					<td>
+						<div th:each="listadb : ${listir.adb}" th:field="${listadb}">
+								<table align="center">
+									<thead>
+									  <tr>
+									    <th>Itemset</th>
+									    <th>Support Count</th>
+									  </tr>
+									</thead>
+									<tbody>   
+										<tr th:each="row : ${listadb.db}" th:field="${row}">
+									        <td align="center">
+												<div th:if="${row.indicator!=-1}" th:utext="${#strings.replace(#strings.replace(#strings.arrayJoin(row.itemset, ', ')	,'[',''),']','')}"></div>
+												<div th:if="${row.indicator==-1}" th:utext="${'&lt;s&gt;'+#strings.replace(#strings.replace(#strings.arrayJoin(row.itemset, ', '),'[',''),']','')}+'&lt;/s&gt;'"
+													style="color:red"></div>	
+											</td>
+											<td align="center" >
+												<div th:if="${row.indicator!=-1}" th:text="${row.indicator}"></div>
+												<div th:if="${row.indicator==-1}" style="color:red" th:text="${'minimum support constraint not met'}"></div>
+											</td>
+							      		</tr>
+								    </tbody>		
+								</table>	
+						</div>									
+					</td>
+			</tbody>	
+			</table>	
+			
+			</br>
+			<h4 align="center">Frequent Pattern:</h4>	
+			
+			<table align="center">
+				<thead>
+					<tr>
+						<th>Support Count</th>
+						<th>Itemset</th>
+					</tr>
+				</thead>
+				<tbody>  
+					<tr th:each="row : ${fp}" th:field="${row}">
+						<td th:text="${row.indicator}"></td>
+						<td>
+							<div th:utext="${#strings.replace(#strings.replace(#strings.arrayJoin(row.itemset, ', ')	,'[',''),']','')}"></div>					
+						</td>
+					</tr>
+				</tbody>		
+			</table>	
+	
+		</br>
+		<div>	
+			<table>
+				<tr>
+					<td style="text-align: center;border-style: hidden;">
+						<form th:action="@{/rulesTraining}">
+							<input hidden type="text" th:name="trainingProcessNo" th:value=${trainingProcessNo} >
+			    			<button class="buttonNumber" style="width:100%;" type="submit">Rules task</button> 
+						</form>
+					</td>
+				</tr>
+			</table>
+		</div>	
+		</br></br></br>
+	
+		<th:block th:insert="fragments/headerFooter :: footer"/>
+	</body>
+</html>	

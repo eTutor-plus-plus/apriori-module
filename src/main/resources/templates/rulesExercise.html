@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori exercise</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+	
+	<body th:onload="hideAll();">
+	
+		<th:block th:insert="fragments/headerFooter :: exerciseHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Exercise Association Rules')"/>
+
+		<h4 th:utext="'Please derive &lt;b&gt; '+${exerciseService.askRulesLevel}+' &lt;/b&gt; rules with a minimum confidence of &lt;b&gt;'
+			+${exerciseService.minConfidenceLevel}+'%&lt;/b&gt; from following frequent pattern: &lt;b&gt;'+${#strings.arrayJoin(exerciseService.getFrequentPatternForRules(), ', ')}+'&lt;/b&gt;'"></h4>		
+		<div class="full">
+		    <div class="left">
+		          <th:block th:insert="fragments/tables :: datasetTable"/>
+		    </div>
+		    <div class="right">
+		   		<th:block th:insert="fragments/tables :: tableFrequentItems"/>
+		    </div>
+		</div>
+		<h4>
+			Input box for rules:
+		</h4>
+		<div class="ruleBoxWrapper">
+		<table>
+			<tr>
+				<div class="ruleBox">
+					<div th:class="itemsCurrent" th:text="'Current Rule: '" ></div>
+					<div th:id="LHS" th:class="itemsCurrent"  th:onclick="hideNshow('chooseLhs','LHS')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter left hand side items here\''"></span>
+					</div>
+					
+					<div th:id="validateLHS"style="float:left;color: rgb(255, 0, 0);"> 
+						&#8592; Please, enter items!
+					</div>
+					<div  th:class="itemsCurrent"  th:text="'=>'" ></div>
+					<div th:id="RHS" th:class="itemsCurrent"  th:onclick="hideNshow('chooseRhs','RHS')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter right hand side items here\''"></span>
+					</div>
+					
+					<div th:id="validateRHS"style="float:left;color: rgb(255, 0, 0);"> 
+						&#8592; Please, enter items!
+					</div>	
+				</div>
+				<div class=".clear"></div>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<div class="ruleBox">
+					<div th:class="itemsCurrent" th:text="'Confidence'" ></div>
+					<div  th:class="itemsCurrent"  th:text="'='" ></div>
+					<div th:id="upper" th:class="itemsCurrent"  th:onclick="hideNshow('chooseUpper','upper')">
+						Supp(<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter items here\''"></span>)
+					</div>
+					<div th:id="validateLSupItemsUpper"style="float:left;color: rgb(255, 0, 0);"> 
+						&#8592; Please, enter items!
+					</div>
+					<div  th:class="itemsCurrent"  th:text="'/'" ></div>
+					<div th:id="lower" th:class="itemsCurrent"  th:onclick="hideNshow('chooseLower','lower')">
+						Supp(<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter items here\''"></span>)
+					</div>
+					
+					<div th:id="validateSupItemsLower"style="float:left;color: rgb(255, 0, 0);"> 
+						&#8592; Please, enter items!
+					</div>	
+				</div>
+			</tr>	
+		</table>
+
+		<table>
+			<tr>	
+				<div class="ruleBox">
+					<div th:class="itemsCurrent" th:text="'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  '" ></div>
+					<div  th:class="itemsCurrent"  th:text="'='" ></div>
+					<div th:id="numeratorNumber" th:class="itemsCurrent"  th:onclick="hideNshow('chooseNumerator','numeratorNumber')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter numerator here\''"></span>
+					</div>
+					<div th:id="validateNumerator"style="float:left;color: rgb(255, 0, 0);"> 
+						&#8592; Please, enter number!
+					</div>
+					<div  th:class="itemsCurrent"  th:text="'/'" ></div>
+					<div th:id="denominatorNumber" th:class="itemsCurrent" th:onclick="hideNshow('chooseDenominator','denominatorNumber')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter denominator here\''"></span>
+					</div>		
+					<div th:id="validateDenominator" style="float:left;color: rgb(255, 0, 0);"> 
+						&#8592; Please, enter number!
+					</div>		
+					<div  th:class="itemsCurrent"  th:text="'='" ></div>
+					<div th:id="percentNumber" th:class="itemsCurrent"  th:onclick="hideNshow('choosePercent','percentNumber')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter percent here\''"></span>
+					</div>		
+					<div th:id="validatePercent" style="float:left;color: rgb(255, 0, 0);"> 
+						&#8592; Please, enter number!
+					</div>				
+					<div  th:class="itemsCurrent"  th:text="'%'" ></div>
+				</div>
+			</tr>	
+		</table>		
+		<form  onsubmit="return validate()" action="#" th:action="@{/addRuleExercise}"> 
+			<th:block th:id="rule">
+			<input hidden type="text" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo}>
+			<div th:id="chooseLhs">
+				<p class="write" th:text="'Please choose from available items for left hand side:'"/>
+				<input hidden type="text" th:id="itemsFormLhs" th:name="lhs" >
+				<th:block th:each="l2 : ${exerciseService.availableItems}">
+					<input class="buttonItem" type="button" th:value=${l2} th:onclick="addItemLHS([[${l2}]])"/>			
+				</th:block>
+				<input class="buttonItem" style="font-size: 25px;" type="button" value="&#9003;" th:onclick="removeItemLHS();"/>
+			</div>
+			<div th:id="chooseRhs">
+				<p class="write" th:text="'Please choose from available items for right hand side:'"/>
+				<input hidden type="text" th:id="itemsFormRhs" th:name="rhs" >
+				<th:block th:each="l2 : ${exerciseService.availableItems}">
+					<input class="buttonItem" type="button" th:value=${l2} th:onclick="addItemRHS([[${l2}]])"/>			
+				</th:block>
+				<input class="buttonItem" style="font-size: 25px;" type="button" value="&#9003;" th:onclick="removeItemRHS();"/>
+			</div>
+			<div th:id="chooseUpper">
+				<p class="write" th:text="'Please choose from available items for support count (upper):'"/>
+				<input hidden type="text" th:id="itemsFormUpper" th:name="upper" >
+				<th:block th:each="l2 : ${exerciseService.availableItems}">
+					<input class="buttonItem" type="button" th:value=${l2} th:onclick="addItemUpper([[${l2}]])"/>
+				</th:block>		
+				<input class="buttonItem" style="font-size: 25px;" type="button" value="&#9003;" th:onclick="removeItemUpper();"/>	
+			</div>
+			<div th:id="chooseLower">
+				<p class="write" th:text="'Please choose from available items for support count (lower):'"/>
+				<input hidden type="text" th:id="itemsFormLower" th:name="lower" >
+				<th:block th:each="l2 : ${exerciseService.availableItems}">
+					<input class="buttonItem" type="button" th:value=${l2} th:onclick="addItemLower([[${l2}]])"/>
+				</th:block>
+				<input class="buttonItem" style="font-size: 25px;" type="button" value="&#9003;" th:onclick="removeItemLower();"/>			
+			</div>
+			<div th:id="chooseNumerator">
+				<p class="write" th:text="'Please enter numerator:'"/>
+				<input  hidden type="number" th:id="inputNumerator" th:name="numerator" >
+				<th:block th:insert="fragments/numbersPad :: padApriori('padNumerator','inputNumerator','numeratorNumber','chooseNumerator')"/>
+			</div>	
+			<div th:id="chooseDenominator">
+				<p class="write" th:text="'Please enter denominator:'"/>
+				<input  hidden type="number" th:id="inputDenominator" th:name="denominator" >
+				<th:block th:insert="fragments/numbersPad :: pad('padDenominator','inputDenominator','denominatorNumber')"/>
+			</div>
+			<div th:id="choosePercent">
+				<p class="write" th:text="'Please enter percent (round to integer):'"/>
+				<input  hidden type="number" th:id="inputPercent" th:name="percent" >
+				<th:block th:insert="fragments/numbersPad :: pad('padPercent','inputPercent','percentNumber')"/>
+			</div>			
+			</th:block>
+			<button class="buttonNumber" th:id="saveRule" style="width: 100%; margin:auto;display:block;" type="submit" ><b>Save</b> rule</button>
+		</form>
+		</div>
+		<h4 align="center">Rules:</h4>
+				
+		<table align="center" >		
+			<thead>
+			  <tr>
+			    <th>Rule</th>
+				<th>Confidence</th>
+			  </tr>
+			</thead>	
+			<tbody>   
+				<tr th:each="l5 : ${exerciseService.getListRulesStudent()}" th:field="${l5}">
+			        <td>
+						<div> [[${#strings.arrayJoin(l5.lhs, ', ')}]] <b> => </b>[[${#strings.arrayJoin(l5.rhs, ', ')}]]<b>;</b></div>
+					</td>
+					<td>
+						<div> <b>Conf = Supp(</b>[[${#strings.arrayJoin(l5.upperSupp, ', ')}]]<b>) / Supp(</b>[[${#strings.arrayJoin(l5.lowerSupp, ', ')}]]<b>) = </b>[[${l5.upperConf}]]<b> / </b>[[${l5.lowerConf}]]<b> = </b>[[${l5.percentage}]]<b>%</b></div>
+					</td>
+					<td align="right">
+						<button class="buttonItem" th:id="delRule" style="font-size: 12px;float:none;" 
+									th:onclick="deleteRule(
+									[[${#strings.arrayJoin(l5.lhs, ', ')}]],
+									[[${#strings.arrayJoin(l5.rhs, ', ')}]],	
+									[[${#strings.arrayJoin(l5.upperSupp, ', ')}]],
+									[[${#strings.arrayJoin(l5.lowerSupp, ', ')}]], 
+									[[${l5.upperConf}]],
+									[[${l5.lowerConf}]],
+									[[${l5.percentage}]]
+									)" 
+									>&#9003;</button>
+					</td>
+	      		</tr>	      		
+		    </tbody>    	
+		</table>
+		
+		<form  th:id="deleteFormRule" action="#" th:action="@{/deleteRuleExercise}">
+		   	<input hidden type="text" th:name="exerciseProcessNoDel" th:value=${exerciseService.exerciseProcessNo} >	
+		   	<input hidden  type="text" th:id="lhsDel" th:name="lhsDel" />	
+		   	<input hidden  type="text" th:id="rhsDel" th:name="rhsDel" />
+		   	<input hidden  type="text" th:id="confUDel" th:name="confUDel" />	
+		   	<input hidden  type="text" th:id="confLDel" th:name="confLDel" />	
+		   	<input hidden  type="number" th:id="numDel" th:name="numDel" />
+		   	<input hidden  type="number" th:id="denDel" th:name="denDel" />	
+		   	<input hidden  type="number" th:id="perDel" th:name="perDel" />	
+		</form>
+		<div th:id="finished">
+			<form action="#" th:action="@{/rulesExerciseEvaluation}" > 
+				<input hidden type="text" th:name="exerciseProcessNo" th:value=${exerciseService.exerciseProcessNo}>
+				<button class="buttonNumber" style="width: 100%;" type="submit" ><b>Terminate</b> association rule task</button>
+			</form>		
+		</div>
+
+		</br></br></br>
+
+		<th:block th:insert="fragments/headerFooter :: footer"/>		
+	
+	</body>	
+	<script  th:inline="javascript">
+			var itemsListLHS = [];
+			var itemsListDisplayLHS = [];
+			var itemsListRHS = [];
+			var itemsListDisplayRHS = []; 
+			var itemsListUpper = [];
+			var itemsListUpperDisplay = [];
+			var itemsListLower = [];
+			var itemsListLowerDisplay = [];
+	
+		function validate(){
+				let a = document.getElementById("LHS").innerHTML;
+				itemsListDisplayLHS
+	    		if (a == '\'Left hand side\'' || itemsListLHS==''){
+					document.getElementById('validateLHS').style.display = "block";
+					return false;
+				}							
+				let b = document.getElementById("RHS").innerHTML;
+				if (b == '\'Right hand side\'' || itemsListRHS==''){					
+					document.getElementById('validateRHS').style.display = "block";
+					return false;
+				}
+				let c = document.getElementById("upper").innerHTML;
+				if (c == '\'Items\'' || itemsListUpper==''){						
+					document.getElementById('validateLSupItemsUpper').style.display = "block";
+					return false;
+				}				
+				let d = document.getElementById("lower").innerHTML;
+				if (d == '\'Items\'' || itemsListLower==''){					
+					document.getElementById('validateSupItemsLower').style.display = "block";
+					return false;
+				}	
+				let f = document.getElementById("numeratorNumber").innerHTML;				
+				if (isNaN(Number(f)) || Number(f) < 1 || Number(f) > 1000){			
+					document.getElementById('validateNumerator').style.display = "block";
+					return false;
+				}				
+				let g = document.getElementById("denominatorNumber").innerHTML;
+				if (isNaN(Number(g)) || Number(g) < 1 || Number(g) > 1000){			
+					document.getElementById('validateDenominator').style.display = "block";
+					return false;
+				}				
+				let h = document.getElementById("percentNumber").innerHTML;
+				if (isNaN(Number(h)) || Number(h) < 1 || Number(h) > 100){					
+					document.getElementById('validatePercent').style.display = "block";
+					return false;
+				}
+				return true;
+			}
+					
+			function addItemUpper(item){
+				itemsListUpper.push(item);
+				item="  "+item;
+				itemsListUpperDisplay.push(item);
+				document.getElementById("upper").innerHTML ="Supp("+itemsListUpperDisplay+")";
+				document.getElementById("itemsFormUpper").value = itemsListUpper.toString();
+			}
+			
+			function removeItemUpper(){
+				itemsListUpper.pop();
+				itemsListUpperDisplay.pop();
+				document.getElementById("upper").innerHTML ="Supp("+itemsListUpperDisplay+")";				
+				document.getElementById("itemsFormUpper").value = itemsListUpper.toString();
+			} 
+
+			function addItemLower(item){
+				itemsListLower.push(item);
+				item="  "+item;
+				itemsListLowerDisplay.push(item);
+				document.getElementById("lower").innerHTML ="Supp("+itemsListLowerDisplay+")";				
+				document.getElementById("itemsFormLower").value = itemsListLower.toString();
+			}
+			
+			function removeItemLower(){
+				itemsListLower.pop();
+				itemsListLowerDisplay.pop();
+				document.getElementById("lower").innerHTML ="Supp("+itemsListLowerDisplay+")";				
+				document.getElementById("itemsFormLower").value = itemsListLower.toString();
+			} 
+			
+			function addItemLHS(item){
+				itemsListLHS.push(item);
+				item="  "+item;
+				itemsListDisplayLHS.push(item);
+				document.getElementById("LHS").innerHTML =itemsListDisplayLHS+"   ";				
+				document.getElementById("itemsFormLhs").value = itemsListLHS.toString();
+			}
+			
+			function removeItemLHS(){
+				itemsListLHS.pop();
+				itemsListDisplayLHS.pop();
+				document.getElementById("LHS").innerHTML =itemsListDisplayLHS+"   ";				
+				document.getElementById("itemsFormLhs").value = itemsListLHS.toString();
+			} 
+			
+			function addItemRHS(item){
+				itemsListRHS.push(item);
+				item="  "+item;
+				itemsListDisplayRHS.push(item);
+				document.getElementById("RHS").innerHTML =itemsListDisplayRHS+"   ";			
+				document.getElementById("itemsFormRhs").value = itemsListRHS.toString();
+			}
+			
+			function removeItemRHS(){
+				itemsListRHS.pop();
+				itemsListDisplayRHS.pop();
+				document.getElementById("RHS").innerHTML =itemsListDisplayRHS+"   ";				
+				document.getElementById("itemsFormRhs").value = itemsListRHS.toString();
+			} 
+		
+		function popInputField(field, inputField){
+			let text = document.getElementById(field).innerHTML;
+			text2=text.substr(0, text.length - 1);
+			document.getElementById(field).innerHTML=text.replace(text,text2);
+			document.getElementById(inputField).value=text.replace(text,text2);			
+			if(document.getElementById(field).innerHTML==""){
+				document.getElementById(inputField).value=0;
+				document.getElementById(field).innerHTML="0";
+			}
+		}
+		
+		function addNumber(newText, field, inputField) {
+			if(isNaN(document.getElementById(field).innerHTML)){
+				document.getElementById(field).innerHTML="";
+			}
+			let text = document.getElementById(field).innerHTML;
+			text2 = text+newText;
+			document.getElementById(field).innerHTML=text.replace(text,text2);
+			document.getElementById(inputField).value=text.replace(text,text2);
+		}
+		
+		function hide(whichField){
+			document.getElementById(whichField).style.display = "none";
+		}
+    	
+    	function hideAll(){
+				hide('chooseRhs');
+				hide('chooseLhs');
+				hide('chooseUpper');
+				hide('chooseLower');
+				hide('chooseNumerator');
+				hide('chooseDenominator');
+				hide('choosePercent');				
+				hide('validateLHS');
+				hide('validateRHS');
+				hide('validateLSupItemsUpper');
+				hide('validateSupItemsLower');
+				hide('validateNumerator');
+				hide('validateDenominator');
+				hide('validatePercent');
+		}
+		
+		function hideAllValidation(){
+				hide('validateLHS');
+				hide('validateRHS');
+				hide('validateLSupItemsUpper');
+				hide('validateSupItemsLower');
+				hide('validateNumerator');
+				hide('validateDenominator');
+				hide('validatePercent');
+		}
+
+		function hideBorderAll(){
+			document.getElementById('LHS').style.border = "none";
+			document.getElementById('RHS').style.border = "none";
+			document.getElementById('upper').style.border = "none";
+			document.getElementById('lower').style.border = "none";
+			document.getElementById('numeratorNumber').style.border = "none";
+			document.getElementById('denominatorNumber').style.border = "none";
+			document.getElementById('percentNumber').style.border = "none";			
+		}
+		
+		function hideNshow(whichField, focusField){
+			var element = document.getElementById(whichField);
+			var status;
+			if (element.style.display === "none") {
+				status = false;
+				}else{status=true;}
+			hideAll();	
+			hideBorderAll();
+			if (status === false) {
+					document.getElementById(focusField).style.border = "1px solid black";
+					element.style.display = "block";
+				} else {
+					hide(whichField);
+				}
+		}
+
+		function deleteRule(lhs,rhs,confidenceU,confidenceL,numerator,denominator,percent){
+			document.getElementById('lhsDel').value =lhs;
+			document.getElementById('rhsDel').value = rhs;
+			document.getElementById('confUDel').value = confidenceU;
+			document.getElementById('confLDel').value = confidenceL;
+			document.getElementById('numDel').value = numerator;
+			document.getElementById('denDel').value = denominator;
+			document.getElementById('perDel').value = percent;			
+			document.getElementById("deleteFormRule").submit();		
+		}
+		</script>
+	
+</html>

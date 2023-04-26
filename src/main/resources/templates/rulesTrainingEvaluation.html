@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>eTutor++ Apriori training</title>		
+		<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+		<link th:href="@{/css/padStyle.css}" rel="stylesheet" />
+		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+	</head>
+	
+	<body th:onload="showCalc();hideAll();show('flevel1');">
+	
+		<th:block th:insert="fragments/headerFooter :: trainingHeaderTopMenue"/>
+		<th:block th:insert="fragments/headerFooter :: header('Training Association Rules Evaluation')"/>
+		
+		<div>	
+			<table>
+				<tr>
+					<td style="text-align: center; border-style: hidden;">
+						<button class="buttonNumber" style="width:100%;" th:onclick="show('flevel1');">Feedback level <b>1</b></button> 
+					</td>
+
+					<td style="text-align: center;border-style: hidden;">
+		    			<button class="buttonNumber" style="width:100%;" th:onclick="show('flevel2');">Feedback level <b>2</b></button> 
+					</td>
+					
+					<td style="text-align: center;border-style: hidden;">
+		    			<button class="buttonNumber" style="width:100%;" th:onclick="show('flevel3');">Feedback level <b>3</b></button> 
+					</td>
+					
+					<td style="text-align: center;border-style: hidden;">
+		    			<button class="buttonNumber" style="width:100%;" th:onclick="show('flevel4');">Feedback level <b>4</b></button> 
+					</td>
+			</table>
+
+		</div>	
+
+		<div class=".clear"><br/></div>
+	
+		<div align="center" th:id="flevel1">			
+			<h4 align="center">Feedback level 1: </h4>							
+			<p style="font-family: 'Segoe UI';"> Level 1 shows whether the association rule task is completely right or wrong</p>
+			<br/>
+				
+			<table align="center">		
+				<thead>
+				  <tr>
+				    <th style="text-align: center;">Rules Ok</th>		
+				  </tr>
+				</thead>
+		
+				<tbody> 		
+					<tr>
+						<td style="text-align: center;">
+			        		<span th:if="${trainingService.allCorrectRules() == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${trainingService.allCorrectRules()}"></span>
+							<span th:if="${trainingService.allCorrectRules() == 'no'}" style="color:rgb(255, 0, 0)" th:text="${trainingService.allCorrectRules()}"></span>
+						
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>		
+
+
+
+		<div align="center" th:id="flevel2">			
+			<h4 align="center">Feedback level 2: </h4>						
+			<p style="font-family: 'Segoe UI';"> Level 2 shows whether the association rule and its confidence is right or wrong</p>
+			<br/>
+				
+			<table align="center" >		
+				<thead>
+				  <tr>
+				    <th>Rule</th>	
+				    <th>Confidence</th>
+				    <th>Ok</th>
+				  </tr>
+				</thead>		
+				<tbody> 
+					<tr th:if="${trainingService.getListRulesCorrection().size()==0}">
+						<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+					</tr>				
+				
+					<tr  
+					th:if="${trainingService.getListRulesCorrection().size()!=0}"
+					th:each="r : ${trainingService.getListRulesCorrection()}" th:field="${r}">
+						<td>
+			        		<div> [[${#strings.arrayJoin(r.lhs, ', ')}]] <b> => </b>[[${#strings.arrayJoin(r.rhs, ', ')}]]<b>;</b></div>
+						</td>
+						<td>
+							<div> <b>Conf = Supp(</b>[[${#strings.arrayJoin(r.upperSupp, ', ')}]]<b>) / Supp(</b>[[${#strings.arrayJoin(r.lowerSupp, ', ')}]]<b>) = </b>[[${r.upperConf}]]<b> / </b>[[${r.lowerConf}]]<b> = </b>[[${r.percentage}]]<b>%</b></div>
+						</td>
+						<td>
+							<span th:if="${r.formulaConfOk == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${r.formulaConfOk}"></span>
+							<span th:if="${r.formulaConfOk == 'no'}" style="color:rgb(255, 0, 0)" th:text="${r.formulaConfOk}"></span>
+						
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>	
+		
+		<div align="center" th:id="flevel3">		
+			<h4 align="center">Feedback level 3: </h4>							
+			<p style="font-family: 'Segoe UI';"> Level 3 shows whether the association rule and/or its confidence is right or wrong</p>
+			<br/>
+							
+			<table align="center" >		
+				<thead>
+				  <tr>
+				    <th>Rule</th>
+					<th>Confidence</th>
+					<th>Rule OK</th>
+	
+					<th>Confidence OK</th>
+				  </tr>
+				</thead>
+	
+				<tbody>  
+				
+					<tr th:if="${trainingService.getListRulesCorrection().size()==0}">
+						<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												
+						<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+					</tr>					
+				
+					<tr 
+					th:if="${trainingService.getListRulesCorrection().size()!=0}"
+					th:each="l5 : ${trainingService.getListRulesCorrection()}" th:field="${l5}">
+				        <td>
+							<div> [[${#strings.arrayJoin(l5.lhs, ', ')}]] <b> => </b>[[${#strings.arrayJoin(l5.rhs, ', ')}]]<b>;</b></div>
+						</td>
+						<td>
+							<div> <b>Conf = Supp(</b>[[${#strings.arrayJoin(l5.upperSupp, ', ')}]]<b>) / Supp(</b>[[${#strings.arrayJoin(l5.lowerSupp, ', ')}]]<b>) = </b>[[${l5.upperConf}]]<b> / </b>[[${l5.lowerConf}]]<b> = </b>[[${l5.percentage}]]<b>%</b></div>
+						</td>
+						<td>
+							<div> 
+								<span th:if="${l5.ruleOk == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${l5.ruleOk}"></span>
+								<span th:if="${l5.ruleOk == 'no'}" style="color:rgb(255, 0, 0)" th:text="${l5.ruleOk}"></span>
+							</div>
+						</td>
+						<td>
+							<div> 
+								<span th:if="${l5.confOk == 'yes' and l5.formulaConfOk == 'yes' }" style="color:rgb(0, 128, 0)" th:text="${l5.confOk}"></span>
+								<span th:if="${l5.confOk == 'no' or l5.formulaConfOk == 'no' }" style="color:rgb(255, 0, 0)" th:text="no"></span>
+							</div>
+						</td>
+		      		</tr>	      		
+			    </tbody>	    	
+			</table>	
+
+		</div >				
+		
+		<div  align="center" th:id="flevel4">			
+			<h4 align="center">Feedback level 4: </h4>							
+			<p style="font-family: 'Segoe UI';"> Level 4 shows whether the association rule and/or its confidence (including the formula and the calculation) is right or wrong</p>
+			<br/>
+				
+			<table align="center" >	
+				<thead>
+				  <tr>
+				    <th>Rule</th>
+					<th>Confidence</th>
+					<th>Rule OK</th>
+					<th>Formula OK</th>
+					<th>Calculation OK</th>
+				  </tr>
+				</thead>	
+				<tbody>   
+				
+					<tr th:if="${trainingService.getListRulesCorrection().size()==0}">
+						<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+												
+						<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+						<td>
+							<span style="color:rgb(255, 0, 0)" th:text="'na'"></span>
+						</td>
+					</tr>					
+				
+					<tr 
+					th:if="${trainingService.getListRulesCorrection().size()!=0}"
+					th:each="l5 : ${trainingService.getListRulesCorrection()}" th:field="${l5}">
+				        <td>
+							<div> [[${#strings.arrayJoin(l5.lhs, ', ')}]] <b> => </b>[[${#strings.arrayJoin(l5.rhs, ', ')}]]<b>;</b></div>
+						</td>
+						<td>
+							<div> <b>Conf = Supp(</b>[[${#strings.arrayJoin(l5.upperSupp, ', ')}]]<b>) / Supp(</b>[[${#strings.arrayJoin(l5.lowerSupp, ', ')}]]<b>) = </b>[[${l5.upperConf}]]<b> / </b>[[${l5.lowerConf}]]<b> = </b>[[${l5.percentage}]]<b>%</b></div>
+						</td>
+						<td>
+							<div> 
+								<span th:if="${l5.ruleOk == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${l5.ruleOk}"></span>
+								<span th:if="${l5.ruleOk == 'no'}" style="color:rgb(255, 0, 0)" th:text="${l5.ruleOk}"></span>
+							</div>
+						</td>					
+						<td>
+							<div> 
+								<span th:if="${l5.formulaConfOk == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${l5.formulaConfOk}"></span>
+								<span th:if="${l5.formulaConfOk == 'no'}" style="color:rgb(255, 0, 0)" th:text="${l5.formulaConfOk}"></span>
+							</div>
+						</td>					
+						<td>
+							<div> 
+								<span th:if="${l5.confOk == 'yes'}" style="color:rgb(0, 128, 0)" th:text="${l5.confOk}"></span>
+								<span th:if="${l5.confOk == 'no'}" style="color:rgb(255, 0, 0)" th:text="${l5.confOk}"></span>
+							</div>
+						</td>
+		      		</tr>	      		
+			    </tbody>	    	
+			</table>
+			
+		</div>
+		
+		</br></br></br>
+		
+		<table>
+			<tr>
+				<td style="text-align: center; border-style: hidden;">
+					<button class="buttonNumber" style="width:50%;" th:onclick="showCalc();"><b>Calculation</b> result</button> 
+				</td>
+			</tr>
+		</table>	
+		
+		</br>
+		<div th:id="calc">
+			<h4 align="center">Calculation result: </h4>	
+			<div class="full" align="center" >			
+			   	<div class="left">				
+					<h4 align="center">Points for apriori task:</h4>
+		
+					<table >
+					    <thead>
+							<tr> 
+					        	<th>Points for</th>
+					        	<th>Amount</th>
+							</tr>
+					    </thead>
+						<tbody>
+							<tr><td style="text-align: center;"><b>Interim results:</b></td></tr>
+							<tr >
+								<td>
+										Points for right interim items in row
+								</td>
+								<td>
+										[[${points.countViableItemsInterTwoDecimals}]]
+								</td>
+							</tr>
+							<tr >
+								<td>
+										Points for right support count for interim row (only if interim items are correct)
+								</td>
+								<td>
+										[[${points.countViableSupInterTwoDecimals}]]
+								</td>
+							</tr>
+							<tr >
+								<td>
+										Penalty for wrong interim row
+								</td>
+								<td>
+										[[${points.countMalRowInterTwoDecimals}]]
+								</td>
+							</tr>
+							<tr >
+								<td>
+										Penalty for forgotten interim row
+								</td>
+								<td>
+										[[${points.countForgottenInterTwoDecimals}]]
+								</td>
+							</tr>
+							
+							<tr >
+								<td>
+										<i>Sum points interim results</i>
+								</td>
+								<td th:with="sumInterim=${points.countViableItemsInter+points.countViableSupInter+points.countMalRowInter+points.countForgottenInter} ">
+										[[${points.sumInterimTwoDecimals}]]
+								</td>
+							</tr>
+							<tr><td style="text-align: center;"><b>Frequent pattern:</b></td></tr>
+							<tr >
+								<td>
+										Points for right frequent items in row
+								</td>
+								<td>
+										[[${points.countViableItemsFreqTwoDecimals}]]
+								</td>
+							</tr>
+							<tr >
+								<td>
+										Points for right support count in frequent items row
+								</td>
+								<td>
+										[[${points.countViableSupFreqTwoDecimals}]]
+								</td>
+							</tr>
+							<tr >
+								<td>
+										Penalty for wrong frequent items row
+								</td>
+								<td>
+										[[${points.countMalRowFreqTwoDecimals}]]
+								</td>
+							</tr>
+							<tr >
+								<td>
+										Penalty for forgotten frequent items row
+								</td>
+								<td>
+										[[${points.countForgottenFreqTwoDecimals}]]
+								</td>
+							</tr>
+							<tr >
+								<td>
+										<i>Sum points frequent pattern</i>
+								</td>
+								<td th:with="sumFrequent=${points.countViableItemsFreq+points.countViableSupFreq+points.countMalRowFreq+points.countForgottenFreq} ">
+										[[${points.sumFrequentTwoDecimals}]]
+								</td>
+							</tr>
+							<tr><td style="text-align: center;"><b>Sum:</b></td></tr>	
+							<tr >
+								<td>
+										<i>Sum points for apriori task:</i>
+								</td>
+								<td>
+										[[${points.sumTwoDecimals}]]
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+		    	</div>		
+				<div class="right">				
+					<h4 align="center">Points for association rules:</h4>					
+					<table align="center">
+						<thead>
+							<tr>
+								<th>Points for</th>
+								<th>Amount</th>
+							</tr>
+						</thead>
+					<tbody>
+						<tr><td style="text-align: center;"><b>Association rules:</b></td></tr>
+						<tr >
+							<td>
+									Points for right rule
+							</td>
+							<td>
+									<i>[[${pointsRules.evalruleTwoDecimals}]]</i>
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Points for right confidence formula
+							</td>
+							<td>
+									<i>[[${pointsRules.evalformulaTwoDecimals}]]</i>
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Points for right fraction and percent
+							</td>
+							<td>
+									<i>[[${pointsRules.evalconfidenceTwoDecimals}]]</i>
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Penalty for wrong rule
+							</td>
+							<td>
+									<i>[[${pointsRules.evalpenaltyruleincorrectTwoDecimals}]]</i>
+							</td>
+						</tr>
+						<tr >
+							<td>
+									Penalty for forgotten rule
+							</td>
+							<td>
+									[[${pointsRules.evalpenaltyruleforgottenTwoDecimals}]]
+							</td>
+						</tr>
+						
+						<tr><td style="text-align: center;"><b>Sum:</b></td></tr>	
+						<tr >
+							<td>
+									<i>Sum points for association rules task:</i>
+							</td>
+							<td>
+									[[${pointsRules.sumTwoDecimals}]]
+							</td>
+						</tr>
+					</tbody>
+					</table>	
+					
+				</div>	
+	    	</div>
+		</div>
+		</br></br></br>
+		<h5 align="center" style="font-family: sans-serif;font-size: 1em;"> Result overall:  [[${points.sumTwoDecimals+pointsRules.sumTwoDecimals}]] points</h5>
+		<h4 align="center" style="font-family: sans-serif;font-size: 0.8em;"> (Maximum number of points for both tasks:  [[${trainingService.maxPoints}]])</h4>
+		</br></br></br>			
+
+		</br>
+				<div>	
+				<table>
+					<tr>
+						<td style="text-align: center; border-style: hidden;">
+							<form th:action="@{/startNewTrainingSetup}">
+								<input hidden type="text" th:name="trainingProcessNo" th:value=${trainingService.trainingProcessNo} >
+								<button class="buttonNumber" style="width:100%;" type="submit"><b>New</b> training</button>
+							</form> 
+						</td>
+						<td  style="text-align: center;border-style: hidden;">
+							<form th:action="@{/endExtension}">
+								<input hidden type="text" th:name="trainingProcessNo" th:value=${trainingService.trainingProcessNo} >
+			    				<button class="buttonNumber" style="width:100%;" type="submit"><b>End</b> training</button> 
+						</td>
+	
+					</tr>
+				</table>
+			</div>		
+
+	</br></br></br></br>
+	
+	<th:block th:insert="fragments/headerFooter :: footer"/>
+	
+	</body>
+	<script  th:inline="javascript">
+
+		function hideAll(){
+			document.getElementById('flevel1').style.display = "none";
+			document.getElementById('flevel2').style.display = "none";
+			document.getElementById('flevel3').style.display = "none";
+			document.getElementById('flevel4').style.display = "none";			
+		}
+				
+		function show(table){
+			hideAll();
+			document.getElementById(table).style.display = "block";
+		}
+		
+		function showCalc(){
+			if (document.getElementById('calc').style.display === "none") {
+				document.getElementById('calc').style.display = "block";
+				} else {
+				document.getElementById('calc').style.display = "none";
+				}
+		}
+	</script>		
+</html>		

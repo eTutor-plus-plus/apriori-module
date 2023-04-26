@@ -1,0 +1,64 @@
+
+<th:block th:fragment="datasetTable">	
+	<h4 align="center">Dataset:</h4>
+	<table align="center" >	
+		<thead>
+		  <tr>
+		    <th>TransactionID</th>
+		    <th>Items</th>
+		  </tr>
+		</thead>
+		<tbody>   
+			<tr th:each="element : ${ads}" th:field="${element}">	 	
+		        <td th:text="${element.id}"></td>
+		        <td>
+					<div th:text="${#strings.arrayJoin(element.items, ', ')}"></div>
+				</td>
+      		</tr>     		
+	    </tbody>	    
+	</table>	    
+</th:block>
+
+<th:block th:fragment="tableFrequentItems">
+	<h4 align="center">Frequent items:</h4>
+	<table align="center" >	
+		<thead>
+		  <tr>
+		    <th>Support count</th>
+		    <th>Items</th>
+		  </tr>
+		</thead>
+		<tbody>   
+			<tr th:each="l5 : ${frequent}" th:field="${l5}">	 	
+		        <td th:text="${l5.count}"></td>	  
+		        <td>
+					<div th:text="${#strings.arrayJoin(l5.items, ', ')}"></div>
+				</td>			
+      		</tr>     		
+	    </tbody>   	
+	</table>	
+</th:block>
+
+<th:block th:fragment="tableFrequentItemsDeleteButton">
+	<h4 align="center">Frequent items:</h4>
+	<table align="center" >	
+		<thead>
+		  <tr>
+		    <th>Support count</th>
+		    <th>Items</th>
+		    <th></th>
+		  </tr>
+		</thead>
+		<tbody>   
+			<tr th:each="frequent : ${frequentList}" th:field="${frequent}"> 	
+		        <td th:text="${frequent.count}"></td>  
+		        <td>
+					<div th:text="${#strings.arrayJoin(frequent.items, ', ')}"></div>
+				</td>			
+				<td>
+					<button class="buttonItem" th:id="delFrequentAA" style="font-size: 12px;float:none;" th:onclick="deleteFrequent([[${#strings.arrayJoin(frequent.items, ', ')}]],[[${frequent.count}]])" >&#9003;</button>			
+				</td>
+      		</tr>
+	    </tbody>    	
+	</table>		
+</th:block>

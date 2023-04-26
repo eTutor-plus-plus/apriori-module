@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Apriori Message</title>
+	<link th:href="@{/css/headerFooterStyle.css}" rel="stylesheet" />
+	<link th:href="@{/css/pageStyle.css}" rel="stylesheet" />
+	<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
+</head>
+
+<body>
+
+	<th:block th:insert="fragments/headerFooter :: header('Message')"/>
+	
+	<h3> Please, restart the application from the eTutor++ </h3>
+	
+	<p class="standard" th:text="${message}"></p>	
+	<th:block th:insert="fragments/headerFooter :: footer"/>
+
+</body>
+    
+</html>

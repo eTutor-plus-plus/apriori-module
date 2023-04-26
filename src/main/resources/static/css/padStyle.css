@@ -1,0 +1,39 @@
+.wrapperKeypad{
+  height: 240px;
+  width: 180px;
+}
+
+.wrapperNumbers {	 
+  width: 180;
+  display: grid;
+  grid-template-columns: 60px 60px 60px;
+  color: #444;
+  box-shadow: 3px 5px   #d6eaf8  ;
+  font-family: "Segoe UI";
+}
+
+.buttonNumber {
+	height:60px;
+    width:60px;
+  background-color: #839192; 
+  border: 1px solid  #f0f3f4 ;
+  color: white;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  font-family: "Segoe UI";
+  text-align: center;  
+   line-height: 0px;   
+	z-index: 100;
+}
+
+.buttonNumber:hover {
+  background-color: #f0f3f4;
+  color: rgb(64, 0, 64);
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.24), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
