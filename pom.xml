@@ -8,13 +8,13 @@
 		<version>2.7.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ETutor</groupId>
-	<artifactId>ETutor</artifactId>
+	<groupId>at.jku.dke.etutor</groupId>
+	<artifactId>apriori</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ETutor</name>
 	<description>ETutor</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>	
 	</properties>
 	<dependencies>
 		<dependency>
