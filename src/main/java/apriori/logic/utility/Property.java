@@ -1,6 +1,5 @@
 package apriori.logic.utility;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
@@ -10,6 +9,33 @@ import java.util.Properties;
  */
 public class Property {
 
+	private final static String configFile = "/application.properties";
+	
+	/**
+	 * for retrieving string value
+	 * 
+	 * @param key key constant in config file
+	 * @return corresponding string
+	 */
+	public static String getProperty(String key) {
+
+		String loaded = "na";
+		Properties property = new Properties();
+		try (
+				var rs = Property.class.getResourceAsStream(configFile)
+				)
+		{
+			property.load(rs);
+
+			loaded = property.getProperty(key);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return loaded;
+	}
+	
+	
 	/**
 	 * for retrieving double value
 	 * 
@@ -20,11 +46,11 @@ public class Property {
 
 		double number = -9999999.999999;
 		Properties property = new Properties();
-		String configFilePath = "src/main/resources/aprioriConfig.properties";
-		try {
-			FileInputStream propertyInput = new FileInputStream(configFilePath);
-
-			property.load(propertyInput);
+		try (
+				var rs = Property.class.getResourceAsStream(configFile)
+				)
+		{
+			property.load(rs);
 
 			String loaded = property.getProperty(key);
 
@@ -38,6 +64,8 @@ public class Property {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return number;
@@ -53,11 +81,11 @@ public class Property {
 
 		int number = -9999999;
 		Properties property = new Properties();
-		String configFilePath = "src/main/resources/aprioriConfig.properties";
-		try {
-			FileInputStream propertyInput = new FileInputStream(configFilePath);
-
-			property.load(propertyInput);
+		try (
+				var rs = Property.class.getResourceAsStream(configFile)
+				)
+		{
+			property.load(rs);
 
 			String loaded = property.getProperty(key);
 
@@ -71,33 +99,9 @@ public class Property {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return number;
-	}
-
-	/**
-	 * for retrieving string value
-	 * 
-	 * @param key key constant in config file
-	 * @return corresponding string
-	 */
-	public static String getProperty(String key) {
-
-		String loaded = "na";
-		Properties property = new Properties();
-		String configFilePath = "src/main/resources/aprioriConfig.properties";
-		try {
-			FileInputStream propertyInput = new FileInputStream(configFilePath);
-
-			property.load(propertyInput);
-
-			loaded = property.getProperty(key);
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return loaded;
 	}
 }
