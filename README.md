@@ -14,11 +14,11 @@ Features for tutors are:
 
 ## Spring Boot Application
 
-Port: 8085 //TODO adapt port
+Port: 8086 
 
 ## Security
 
-In order to enable secure communication, the same password must apply in both the eTutor++ and the extension (stored in the ```app.constants.ts``` file of the eTutor++ and in the ```aprioriConfig.properties``` configuration file of the extension). //TODO adapt file
+In order to enable secure communication, the same password must apply in both the eTutor++ and the extension (stored in the ```application.yml``` file of the eTutor++ and in the ```application.properties``` configuration file of the extension). 
 
 ## Dependencies
 
@@ -32,9 +32,8 @@ The extension uses the Postgres and the RDF databases of the eTutor++.
 
 ## Properties
 
-  The Spring specific configuration is in the ```application.properties``` file. 
-  The properties of the extension are in the ```aprioriConfig.properties``` file.
-  The relevant properties of the eTutor++ Angular front-end in relation to the extension are located in the ```app.constants.ts``` file of the platform. //TODO adapt file
+  The properties of the extension are in the ```application.properties``` file.
+  The relevant properties of the eTutor++ Angular front-end in relation to the extension are located in the ```application.yml``` file of the platform. 
 
 ## Remark for developers
 
