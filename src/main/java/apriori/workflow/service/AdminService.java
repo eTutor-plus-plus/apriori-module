@@ -581,7 +581,7 @@ public class AdminService {
 	 * for making frequent items solution table
 	 */
 	public void setFrequentTableSolution() {
-		apriori.getFrequentPatterns().displayTable();
+//		apriori.getFrequentPatterns().displayTable();
 		frequentTableSolution = new ArrayList<>();
 		for (AprioriDataBaseRow adbr : apriori.getFrequentPatterns().getFrequentPatterns()) {
 			frequentTableSolution.add(new FrequentItemRow(adbr.getIndicator(), adbr.getItemset().getItems()));
