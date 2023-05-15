@@ -49,7 +49,7 @@ public class Apriori {
 	private void makeListPrunedOnly() {
 		for (InterimResults ir : interimResultsStorage) {
 			if (ir.getId().indexOf("pruned") != -1) {
-				ir.displayTable();
+//				ir.displayTable();
 				interimResultsPrunedOnly.add(ir);
 			}
 		}
