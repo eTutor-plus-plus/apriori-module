@@ -6,15 +6,21 @@ import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionRemote;
 import org.apache.jena.update.UpdateRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * class for sparql utility functions (sparql queries adapted from eTutor++)
  */
 public class SPARQLUtility {
 
-	private static String linkSparql = Property.getProperty("semantic.link");
-	private static String queryEndpoint = Property.getProperty("semantic.query.endpoint");
-	private static String updateEndpoint = Property.getProperty("semantic.update.endpoint");
+
+	@Value( "${semantic.link}" )
+	private static String linkSparql;
+	@Value( "${semantic.query.endpoint}" )
+	private static String queryEndpoint;
+	@Value( "${semantic.update.endpoint}" )
+	private static String updateEndpoint;
 
 	/**
 	 * for checking if sheet is closed
