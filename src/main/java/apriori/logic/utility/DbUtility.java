@@ -17,12 +17,15 @@ import apriori.logic.algorithm.ItemSet;
 import apriori.logic.algorithm.Row;
 import apriori.logic.datageneration.AssociationDataSet;
 import apriori.logic.datageneration.AssociationRow;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * class for data base associated utility methods
  */
+@Configuration
 public class DbUtility {
-
 	/**
 	 * for verifying uuid specification
 	 * 

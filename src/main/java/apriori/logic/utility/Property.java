@@ -28,6 +28,9 @@ public class Property {
 			property.load(rs);
 
 			loaded = property.getProperty(key);
+			if(loaded.contains("$")){ // the value is in fact a environment variable that has to be replaced
+				loaded = System.getenv(loaded.substring(2, loaded.length() - 1));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
