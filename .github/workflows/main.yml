@@ -31,6 +31,12 @@ jobs:
       with:
         java-version: 17
         
+    - name: Delete default application.properties and copy docker-version into resources folder
+      working-directory: repo
+      run: |
+          rm ./src/main/resources/application.properties
+          cp ./resources/docker/application.properties ./src/main/resources/
+          
     - name: Build project with Maven
       working-directory: repo
       run: mvn -B package -DskipTests
