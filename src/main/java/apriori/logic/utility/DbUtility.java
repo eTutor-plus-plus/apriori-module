@@ -44,6 +44,7 @@ public class DbUtility {
 	 */
 	public static String decrypt(String toDecrypt) {
 		String keyString = Property.getProperty("etutorplusplus.extension.key");
+		System.out.println("KEY STRING: " + keyString);
 		try {
 			IvParameterSpec iv = new IvParameterSpec(keyString.getBytes("UTF-8"));
 			SecretKeySpec secretkeySpec = new SecretKeySpec(keyString.getBytes("UTF-8"), "AES");
