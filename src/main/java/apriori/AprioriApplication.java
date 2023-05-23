@@ -25,7 +25,7 @@ public class AprioriApplication {
 		System.out.println(Property.getProperty("semantic.update.endpoint"));
 		System.out.println(Property.getProperty("spring.datasource.url"));
 		System.out.println(Property.getProperty("spring.datasource.username"));
-		System.out.println(Property.getProperty("spring.datasource.passwordk"));
+		System.out.println(Property.getProperty("spring.datasource.password"));
 		System.out.println(Property.getProperty("----------------------CONFIGURATION END--------------------"));
 		SpringApplication.run(AprioriApplication.class, args);
 	}
