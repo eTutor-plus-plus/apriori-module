@@ -14,14 +14,9 @@ import org.springframework.stereotype.Service;
  */
 public class SPARQLUtility {
 
-
-	@Value( "${semantic.link}" )
-	private static String linkSparql;
-	@Value( "${semantic.query.endpoint}" )
-	private static String queryEndpoint;
-	@Value( "${semantic.update.endpoint}" )
-	private static String updateEndpoint;
-
+	private static String linkSparql = Property.getProperty("semantic.link");
+	private static String queryEndpoint = Property.getProperty("semantic.query.endpoint");
+	private static String updateEndpoint = Property.getProperty("semantic.update.endpoint");
 	/**
 	 * for checking if sheet is closed
 	 * 
