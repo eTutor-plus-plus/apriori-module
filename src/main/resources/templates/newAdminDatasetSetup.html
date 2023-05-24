@@ -233,7 +233,7 @@
 			let elementShowMaxItemsDependency = document.getElementById('availableNumber').innerHTML;
 			let elementInputMaxItemsDependency = document.getElementById('inputAvailable').innerHTML;
 
-			if(elementInputMaxItems.innerHTML==0){
+			if(elementInputMaxItems.value==0){
 						elementInputMaxItems.innerHTML=2;
 						elementInputMaxItems.value=2;
 						elementShowMaxItems.innerHTML=2;
@@ -244,7 +244,7 @@
 				let avItemsT  = document.getElementById('availableNumber').innerHTML;
 				let avItemsC = [[${adminService.getAvitems()}]];
 				
-				if( Number(elementShowMaxItems.innerHTML) >  Number(avItemsT) ){
+				if( Number(elementShowMaxItems.value) >  Number(avItemsT) ){
 						
 					if ( Number(elementShowMaxItems.innerHTML) >   Number(avItemsC) ){
 						
