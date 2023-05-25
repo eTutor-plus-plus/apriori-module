@@ -37,11 +37,12 @@
 					</td>
 					<td >
 						<form action="#" th:id="difficultyForm" th:action="@{/newTrainingSetup}"> 
-							<input hidden type="text" th:id="trainingProcessNoID" th:name="trainingProcessNo" th:value="${trainingProcessNo}">
-							<select class="fieldNumberInput" style="font-size: 12px;" th:id="typeL" name="level">
+							<input hidden type="text" th:id="trainingProcessNoID" th:name="trainingProcessNo" th:value="${trainingService.getTrainingProcessNo()}">
+							<select class="fieldNumberInput" style="font-size: 12px;" th:id="typeL" name="level"
+							th:onchange="changeDifficulty()">
 								<option th:value="sameOld" >Select difficulty configuration</option>
 	    						<option class="buttonNumber" th:each="typeOption : ${T(apriori.logic.utility.TypeDifficultyLevel).values()}" 
-	        						th:value="${typeOption}" th:text="${typeOption.displayValue}" th:onclick="changeDifficulty();"></option>
+	        						th:value="${typeOption}" th:text="${typeOption.displayValue}" ></option>
 							</select>
 						</form>	
 					</td>	
@@ -125,10 +126,10 @@
 					</td>
 					<td >
 						<input hidden  type="text" th:id="inputType" th:name="types" placeholder="type here" value="ABC">
-						<select class="fieldNumberInput" style="font-size: 12px;" th:id="typeT" name="typeDataset">
+						<select class="fieldNumberInput" style="font-size: 12px;" th:id="typeT" name="typeDataset"
+						th:onchange="document.getElementById('inputType').value=document.getElementById('typeT').value">
 	    					<option class="buttonNumber" th:each="typeOpt : ${T(apriori.logic.utility.TypeDataset).values()}" 
-	        					th:value="${typeOpt}" th:text="${typeOpt.displayValue}" 
-	        					th:onclick="document.getElementById('inputType').value=document.getElementById('typeT').value">
+	        					th:value="${typeOpt}" th:text="${typeOpt.displayValue}">
 	        				</option>
 						</select>
 					</td>
