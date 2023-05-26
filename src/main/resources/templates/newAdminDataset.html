@@ -302,6 +302,7 @@
 			</div>	
 		</div>
 		<p class="standard"> (Task Config UUID: [[${adminService.idTaskConfig}]])</p>
+					<input hidden type="text" th:name="taskConfigId" th:value=${adminService.idTaskConfig}>
 					<input hidden type="text" th:name="adminProcessNo" th:value=${adminService.adminProcessNo}>
 					<input hidden type="text" th:id="inputDS" th:name="nameDatasetI" th:value=${adminService.nameDataset}>
 		    		<button class="buttonNumber" style="width: 100%; margin:auto;display:block;" type="submit" >Save Dataset & Task Configuration</button> 
