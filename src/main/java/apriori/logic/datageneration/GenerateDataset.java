@@ -143,7 +143,6 @@ public class GenerateDataset {
 		Sampl sample = new Sampl(itemSet);
 		ads = sample.generateAssociationDataSet(numberOfTransactions, maxSize, minSize);
 
-		fileName = "/" + fileName;
 		InputStream id = null;
 
 		try (var rs = Property.class.getResourceAsStream(fileName)) {
