@@ -10,6 +10,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import apriori.logic.utility.Property;
 import apriori.logic.utility.TypeDataset;
@@ -137,9 +139,11 @@ public class GenerateDataset {
 
 		AssociationDataSet ads;
 		WeightedItemSet itemSet = WeightedItemSet.generateAlphabeticABC(numberOfElements);
+
 		Sampl sample = new Sampl(itemSet);
 		ads = sample.generateAssociationDataSet(numberOfTransactions, maxSize, minSize);
 
+		fileName = "/" + fileName;
 		InputStream id = null;
 
 		try (var rs = Property.class.getResourceAsStream(fileName)) {
@@ -155,22 +159,42 @@ public class GenerateDataset {
 				e.printStackTrace();
 			}
 
-			WeightedItem[] weightedItems = new WeightedItem[content.size()];
-			for (int i = 0; i < content.size(); i++) {
+			List<String[]> contentMod = new ArrayList<>();
+			for (String[] row : content) {
+				String[] rowMod = new String[2];
 
+				for (int i = 0; i < 2; i++) {
+					String elementMod = row[i].toUpperCase();
+					rowMod[i] = elementMod;
+				}
+				contentMod.add(rowMod);
+			}
+
+			Integer[] randoms = new Integer[numberOfElements];
+
+			Set<Integer> set = new Random().ints(0, contentMod.size() - 1).distinct().limit(numberOfElements).boxed()
+					.collect(Collectors.toSet());
+
+			randoms = set.toArray(randoms);
+
+			WeightedItem[] weightedItems = new WeightedItem[numberOfElements];
+			for (int i = 0; i < weightedItems.length; i++) {
 				double dd = 0;
 				try {
-					dd = Double.parseDouble(content.get(i)[0]);
+					dd = Double.parseDouble(contentMod.get(randoms[i])[0]);
+
 				} catch (NumberFormatException ex) {
 					double min = 0.1;
 					double max = Math.random() * (10 - min + 1) + min;
 					Random random = new Random();
 					dd = min + random.nextDouble() * (max - min);
-				}
-				WeightedItem wi = new WeightedItem(content.get(i)[1], (dd / 100));
-				weightedItems[i] = wi;
-			}
 
+				}
+				WeightedItem wi = new WeightedItem(contentMod.get(randoms[i])[1], (dd / 100));
+
+				weightedItems[i] = wi;
+
+			}
 			WeightedItemSet wis = new WeightedItemSet(weightedItems);
 
 			Sampl sam2 = new Sampl(wis);
