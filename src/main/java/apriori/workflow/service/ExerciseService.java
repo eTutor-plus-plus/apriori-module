@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -746,14 +747,22 @@ public class ExerciseService {
 	 * @return -1=wrong; 1=items ok; 2=items+support count ok
 	 */
 	private int checkRow(int idTableTraining, String[] items, int supportCount) {
-		int check = -1;// convention: 1=items ok; 2=items+supportCount ok;
+		int check = -1;
 		for (TrainingTable exerciseTable : solutionList) {
 			int idTableS = exerciseTable.getIdNumber();
 			check = -1;
 			for (TrainingRow trainingRow : exerciseTable.getRow()) {
+
 				if (idTableS == idTableTraining) {
-					String[] itemsS = trainingRow.getItems();
-					if (Arrays.equals(itemsS, items)) {
+
+					String[] trainingRowItemsTrimmed = Arrays.stream(trainingRow.getItems()).map(String::trim)
+							.toArray(String[]::new);
+					trainingRowItemsTrimmed = Stream.of(trainingRowItemsTrimmed).sorted().toArray(String[]::new);
+
+					String[] inpItemsTrimmed = Arrays.stream(items).map(String::trim).toArray(String[]::new);
+					inpItemsTrimmed = Stream.of(inpItemsTrimmed).sorted().toArray(String[]::new);
+
+					if (Arrays.equals(trainingRowItemsTrimmed, inpItemsTrimmed)) {
 						check = 1;
 						if (supportCount == trainingRow.getSupportCount()) {
 							check = 2;
@@ -828,22 +837,27 @@ public class ExerciseService {
 	 */
 	public String allCorrect() {
 		String allOk = "yes";
-		if (frequentItemsTableCorrect().equals("no") || frequentTableCorretion.size() == 0) {
+
+		if (frequentItemsTableCorrect().equals("no") ) {
+			allOk = "no";
+			return allOk;
+		}	
+		if (frequentTableCorretion.size()!= frequentTableSolution.size() ) {
 			allOk = "no";
 			return allOk;
 		}
 		if (correctionList.size() == 0) {
 			allOk = "no";
 			return allOk;
-		}
+		}		
+		
 		for (CorrectionTable ct : correctionList) {
 			if (ct.getCorrect().equals("no")) {
 				allOk = "no";
 				return allOk;
 			}
 		}
-
-		if (resultApriori.getCountForgottenFreq() != 0 || resultApriori.getCountMalRowFreq() != 0) {
+		if (resultApriori.getCountForgottenFreq() != 0 || resultApriori.getCountMalRowFreq() != 0) {		
 			allOk = "no";
 			return allOk;
 		}
