@@ -101,7 +101,7 @@
 				<tr>
 					<div class="ruleBox">
 						<p>
-							<div th:class="itemsCurrent" th:text="'Items for current row in L'+${stepNumber}+': '" ></div>
+							<div th:class="itemsCurrent" th:text="'Items for row in L'+${stepNumber}+': '" ></div>
 							<div  th:id="itemsInterim" th:class="itemsCurrent" th:text="'\'Please, enter items here\''" 
 								th:onclick="hideNshow('chooseInterimItems','itemsInterim')"></div>
 								
@@ -131,7 +131,7 @@
 								</div>
 							</th:block>
 							<p>	
-								<div th:class="itemsCurrent" style="float:left;" th:text="'Associated support count for current row in L'+${stepNumber}+': '" ></div>
+								<div th:class="itemsCurrent" style="float:left;" th:text="'Associated support count for  row in L'+${stepNumber}+': '" ></div>
 								<div th:id="supportInterim" th:class="itemsCurrent" th:text="'\'Please, enter support count here\''" 
 									th:onclick="hideNshow('chooseInterimSupport','supportInterim')"></div>
 									
@@ -164,7 +164,7 @@
 				<tr>
 					<div class="ruleBox">
 						<p>
-							<div th:class="itemsCurrent" th:text="'Items for current row in frequent pattern: '" ></div>
+							<div th:class="itemsCurrent" th:text="'Items for row in frequent pattern: '" ></div>
 							<div th:id="itemsFrequent" th:class="itemsCurrent" th:text="'\'Please, enter items here\''" 
 								th:onclick="hideNshow('chooseFrequentItems','itemsFrequent')"></div>
 								
@@ -194,7 +194,7 @@
 								</div>
 						</th:block>
 						<p>
-							<div  th:class="itemsCurrent"  th:text="'Associated support count for current row in frequent pattern: '" ></div>
+							<div  th:class="itemsCurrent"  th:text="'Associated support count for row in frequent pattern: '" ></div>
 							<div th:id="supportFrequent" th:class="itemsCurrent" th:text="'\'Please, enter support count here\''" 
 								th:onclick="hideNshow('chooseFrequentSupport','supportFrequent')"></div>
 								

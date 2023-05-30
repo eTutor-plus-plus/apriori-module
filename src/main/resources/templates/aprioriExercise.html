@@ -85,7 +85,7 @@
 				<tr>
 					<div class="ruleBox">
 						<p>
-							<div th:class="itemsCurrent" th:text="'Items for current row in L'+${exerciseService.stepNumber}+': '" ></div>
+							<div th:class="itemsCurrent" th:text="'Items for row in L'+${exerciseService.stepNumber}+': '" ></div>
 							<div  th:id="itemsInterim" th:class="itemsCurrent" 
 								th:onclick="hideNshow('chooseInterimItems','itemsInterim')">
 									<span th:id="itemsInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter items here\''"></span>	
@@ -111,7 +111,7 @@
 								</div>
 							</th:block>
 							<p>	
-								<div th:class="itemsCurrent" style="float:left;" th:text="'Associated support count for current row in L'+${exerciseService.stepNumber}+': '" ></div>
+								<div th:class="itemsCurrent" style="float:left;" th:text="'Associated support count for row in L'+${exerciseService.stepNumber}+': '" ></div>
 								<div th:id="supportInterim" th:class="itemsCurrent" 
 									th:onclick="hideNshow('chooseInterimSupport','supportInterim')">
 										<span th:id="supportInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter support count here\''"></span>
@@ -143,7 +143,7 @@
 				<tr>
 					<div class="ruleBox">
 						<p>
-							<div th:class="itemsCurrent" th:text="'Items for current row in frequent pattern: '" ></div>
+							<div th:class="itemsCurrent" th:text="'Items for row in frequent pattern: '" ></div>
 							<div th:id="itemsFrequent" th:class="itemsCurrent" 
 								th:onclick="hideNshow('chooseFrequentItems','itemsFrequent')">
 									<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter items here\''"></span>
@@ -168,7 +168,7 @@
 								</div>
 						</th:block>
 						<p>
-							<div  th:class="itemsCurrent"  th:text="'Associated support count for current row in frequent pattern: '" ></div>
+							<div  th:class="itemsCurrent"  th:text="'Associated support count for row in frequent pattern: '" ></div>
 							<div th:id="supportFrequent" th:class="itemsCurrent" 
 								th:onclick="hideNshow('chooseFrequentSupport','supportFrequent')">
 									<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter support count here\''"></span>
