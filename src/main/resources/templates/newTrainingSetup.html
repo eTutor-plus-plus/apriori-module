@@ -7,7 +7,7 @@
 		<link rel = "icon" th:href ="@{img/jku16x16.png}" type = "image/x-icon">
 	</head>
 	
-	<body th:onload="hideAll();">
+	<body th:onload="hideAll();checkAsk();">
 		
 		<th:block th:insert="fragments/headerFooter :: trainingHeaderTopMenue"/>
 		<th:block th:insert="fragments/headerFooter :: header('Training Setup')"/>
@@ -498,8 +498,23 @@
 			
 			elementShowAskRules.value = elementShowAskRules.innerHTML;
 			elementInputAskRules.innerHTML = elementInputAskRules.value;
-			valMin(elementShowAskRules,elementInputAskRules,2);
+			valMin(elementShowAskRules,elementInputAskRules,Number(0));
 			valMax(elementShowAskRules,elementInputAskRules,Number(elementAskRulesConst));
+
+			if(elementShowAskRules.innerHTML==""){
+				elementShowAskRules.innerHTML=0;
+				elementShowAskRules.value=0;
+			}
+
+		}
+		
+		function checkAsk(){
+			var elementShowAskRules = document.getElementById('rulesNumbersAsk');
+			var elementInputAskRules = document.getElementById('inputRulesAsk');
+			
+			elementInputAskRules.innerHTML = elementShowAskRules.innerHTML;
+			elementShowAskRules.value = elementShowAskRules.innerHTML;
+			elementInputAskRules.value = elementShowAskRules.innerHTML;
 		}
 		
 		function validateMinConfidence(priority){
