@@ -152,12 +152,12 @@
 			<div th:id="chooseDenominator">
 				<p class="write" th:text="'Please enter denominator:'"/>
 				<input  hidden type="number" th:id="inputDenominator" th:name="denominator" >
-				<th:block th:insert="fragments/numbersPad :: pad('padDenominator','inputDenominator','denominatorNumber')"/>
+				<th:block th:insert="fragments/numbersPad :: padApriori('padDenominator','inputDenominator','denominatorNumber','chooseDenominator')"/>
 			</div>
 			<div th:id="choosePercent">
 				<p class="write" th:text="'Please enter percent (round to integer):'"/>
 				<input  hidden type="number" th:id="inputPercent" th:name="percent" >
-				<th:block th:insert="fragments/numbersPad :: pad('padPercent','inputPercent','percentNumber')"/>
+				<th:block th:insert="fragments/numbersPad :: padApriori('padPercent','inputPercent','percentNumber','choosePercent')"/>
 			</div>			
 		</th:block>
 	
