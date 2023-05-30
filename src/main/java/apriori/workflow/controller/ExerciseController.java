@@ -15,6 +15,7 @@ import apriori.db.AprioriConfigService;
 import apriori.db.HorizontalTransaction;
 import apriori.db.HorizontalTransactionService;
 import apriori.logic.utility.DbUtility;
+import apriori.logic.utility.Property;
 import apriori.workflow.service.ExerciseService;
 import apriori.workflow.user.management.ExerciseParticipantService;
 
@@ -46,7 +47,6 @@ public class ExerciseController {
 		Map<String, String> map = DbUtility.decryptInitialVariable(initalVar);
 
 		if (map == null) {
-			System.out.println("map==null: " + map);
 			return "redirect:/sorry...?message=(Decryption failure)";
 		}
 
