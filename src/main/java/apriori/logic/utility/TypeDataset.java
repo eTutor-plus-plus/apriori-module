@@ -33,8 +33,8 @@ public enum TypeDataset {
 	private final static EnumMap<TypeDataset,String> map = new EnumMap<>(TypeDataset.class);
 	
 	static{
-		map.put(BASKETA, "mikrowarenkorb.csv");	
-		map.put(BASKETE, "Groceries_english.csv");
+		map.put(BASKETA, "/mikrowarenkorb.csv");	
+		map.put(BASKETE, "/Groceries_english.csv");
 	}
 
 	public static void printAll() {
@@ -49,7 +49,6 @@ public enum TypeDataset {
 	
 	public static String retrieveFileNameDataset(String key) {
 		String s="TypeDataset."+key;
-		System.out.println(" tt22: "+s);
 		
 		String filename=null;
 		
