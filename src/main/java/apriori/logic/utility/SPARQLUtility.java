@@ -14,13 +14,12 @@ import org.springframework.stereotype.Service;
  */
 public class SPARQLUtility {
 
-	private static String linkSparql = Property.getProperty("semantic.link");
-	private static String queryEndpoint = Property.getProperty("semantic.query.endpoint");
-	private static String updateEndpoint = Property.getProperty("semantic.update.endpoint");
+	private static final String linkSparql = Property.getProperty("semantic.link");
+	private static final String queryEndpoint = Property.getProperty("semantic.query.endpoint");
+	private static final String updateEndpoint = Property.getProperty("semantic.update.endpoint");
 	/**
 	 * for checking if sheet is closed
 	 * 
-	 * @param user    user id
 	 * @param exSheet exercise sheet id (uuid)
 	 * @param coInst  course instance id (uuid)
 	 * @return true(=etutor:isClosed false), false(=etutor:isClosed true; or does

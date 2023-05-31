@@ -15,13 +15,16 @@ import java.util.stream.Collectors;
 
 import apriori.logic.utility.Property;
 import apriori.logic.utility.TypeDataset;
+import org.apache.logging.log4j.Logger;
 
 /**
  * class for generating data sets
  *
  */
 public class GenerateDataset {
-
+	public static void log(String message){
+		System.out.println(message);
+	}
 	/**
 	 * for selecting type of data set
 	 * 
@@ -34,15 +37,19 @@ public class GenerateDataset {
 	 */
 	public static AssociationDataSet generateDataset(String types, int maxElements, int noTransactions, int maxSize,
 			int minSize) {
+		log("%s %s".formatted("Generating dataset for type: ", types));
 		AssociationDataSet ads = null;
 		if (types.equals("ABC")) {
+			log("Generating sequential alphabetically.");
 			ads = GenerateDataset.generateAlphabeticAbc(maxElements, noTransactions, maxSize, minSize);
 		} else if (types.equals("RandomLetters")) {
+			log("Generating random alphabetically.");
 			ads = GenerateDataset.generateAlphabeticRandomLetters(maxElements, noTransactions, maxSize, minSize);
 		}
 
 		EnumMap<TypeDataset, String> map = TypeDataset.getMap();
 		for (Map.Entry<TypeDataset, String> entry : map.entrySet()) {
+			log("%s %s %s %s".formatted("Comparing ", entry.getKey(), " with ", types));
 			if (entry.getKey().toString().equals(types)) {
 				ads = GenerateDataset.generateFromFileResource(entry.getValue().toString(), maxElements, noTransactions,
 						maxSize, minSize);
