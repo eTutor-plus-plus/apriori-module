@@ -26,9 +26,7 @@ public class HorizontalTransactionService {
 	 */
 	public List<HorizontalTransaction> getAllRows() {
 
-		List<HorizontalTransaction> list = (List<HorizontalTransaction>) repo.findAll();
-
-		return list;
+		return repo.findAll();
 
 	}
 
@@ -40,10 +38,7 @@ public class HorizontalTransactionService {
 	 */
 	public boolean checkDatasetExists(UUID uuid) {
 		List<HorizontalTransaction> list = findDatasetByUuid(uuid);
-		if (list.size() == 0) {
-			return false;
-		}
-		return true;
+		return !list.isEmpty();
 	}
 
 	/**
@@ -53,8 +48,7 @@ public class HorizontalTransactionService {
 	 * @return number of rows deleted
 	 */
 	public int deleteDataset(UUID uuid) {
-		int r = repo.deleteDataset(uuid);
-		return r;
+		return repo.deleteDataset(uuid);
 	}
 
 	/**
@@ -65,8 +59,7 @@ public class HorizontalTransactionService {
 	 */
 	public List<HorizontalTransaction> findDatasetByUuid(UUID uuid) {
 
-		List<HorizontalTransaction> list = repo.findDatasetByUuid(uuid);
-		return list;
+		return repo.findDatasetByUuid(uuid);
 	}
 
 	/**
@@ -75,8 +68,7 @@ public class HorizontalTransactionService {
 	 * @return list rows of all data sets
 	 */
 	public List<HorizontalTransaction> findAllSets() {
-		List<HorizontalTransaction> list = repo.findAll();
-		return list;
+		return repo.findAll();
 	}
 
 	/**
@@ -88,16 +80,15 @@ public class HorizontalTransactionService {
 		List<HorizontalTransaction> list = repo.findAll();
 
 		List<HorizontalTransaction> listChecked = new ArrayList<>();
-		int i = 0;
 		for (HorizontalTransaction ht : list) {
 			boolean check = false;
 			for (HorizontalTransaction hts : listChecked) {
 				if (ht.getUuid_ht().equals(hts.getUuid_ht())) {
 					check = true;
-					i++;
+					break;
 				}
 			}
-			if (check == false) {
+			if (!check) {
 				listChecked.add(ht);
 			}
 		}

@@ -51,7 +51,7 @@ public class GenerateDataset {
 		for (Map.Entry<TypeDataset, String> entry : map.entrySet()) {
 			log("%s %s %s %s".formatted("Comparing ", entry.getKey(), " with ", types));
 			if (entry.getKey().toString().equals(types)) {
-				ads = GenerateDataset.generateFromFileResource(entry.getValue().toString(), maxElements, noTransactions,
+				ads = GenerateDataset.generateFromFileResource(entry.getValue(), maxElements, noTransactions,
 						maxSize, minSize);
 			}
 		}
@@ -143,7 +143,8 @@ public class GenerateDataset {
 	 */
 	public static AssociationDataSet generateFromFileResource(String fileName, int numberOfElements,
 			int numberOfTransactions, int maxSize, int minSize) {
-
+		log("%s %s %s %s %s %s %s %s %s %s".formatted("Trying to generate dataset from file: ", fileName, " with number of elements: ", numberOfElements, " number of transactions: ", numberOfTransactions,
+		" maxSize: ", maxSize, ", minSize: ", minSize));
 		AssociationDataSet ads;
 		WeightedItemSet itemSet = WeightedItemSet.generateAlphabeticABC(numberOfElements);
 
