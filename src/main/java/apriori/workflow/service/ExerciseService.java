@@ -627,11 +627,18 @@ public class ExerciseService {
 		}
 		int index = -1;
 		for (int i = 0; i < exerciseList.get(step - 1).getRow().size(); i++) {
-			if (Arrays.equals(itemsArray, exerciseList.get(step - 1).getRow().get(i).getItems())
+			
+			String[] IitemsArray = new String[exerciseList.get(step - 1).getRow().get(i).getItems().length];
+			for (int j = 0; j < exerciseList.get(step - 1).getRow().get(i).getItems().length; j++) {
+				IitemsArray[j] = exerciseList.get(step - 1).getRow().get(i).getItems()[j].trim();
+			}	
+			
+			if (Arrays.equals(itemsArray, IitemsArray)
 					& supportCount == exerciseList.get(step - 1).getRow().get(i).getSupportCount()) {
 				index = i;
 				break;
 			}
+			
 		}
 		List<Integer> forDeletion = new ArrayList<>();
 		for (int i = 0; i < exerciseList.size(); i++) {
@@ -668,11 +675,18 @@ public class ExerciseService {
 		}
 		int index = -1;
 		for (int i = 0; i < frequentTable.size(); i++) {
-			if (Arrays.equals(itemsArray, frequentTable.get(i).getItems())
+			
+			String[] FitemsArray = new String[frequentTable.get(i).getItems().length];
+			for (int j = 0; j < frequentTable.get(i).getItems().length; j++) {
+				FitemsArray[j] = frequentTable.get(i).getItems()[j].trim();
+			}
+			
+			if (Arrays.equals(itemsArray, FitemsArray)
 					& supportCount == frequentTable.get(i).getCount()) {
 				index = i;
 				break;
 			}
+			
 		}
 		if (index != -1) {
 			frequentTable.remove(index);
@@ -932,7 +946,12 @@ public class ExerciseService {
 		RuleExercise newRule = new RuleExercise(trimArray(adaptString(lhs)), trimArray(adaptString(rhs)), numerator,
 				denominator, 0, percent, trimArray(adaptString(upper)), trimArray(adaptString(lower)));
 		for (int i = 0; i < listRulesStudent.size(); i++) {
-			if (listRulesStudent.get(i).equals(newRule)) {
+			
+			RuleExercise adptRule = new RuleExercise(trimArray(listRulesStudent.get(i).getLhs()), trimArray(listRulesStudent.get(i).getRhs()), listRulesStudent.get(i).getUpperConf(),
+					listRulesStudent.get(i).getLowerConf(), 0, listRulesStudent.get(i).getPercentage(), trimArray(listRulesStudent.get(i).getUpperSupp()), trimArray(listRulesStudent.get(i).getLowerSupp()));
+
+			
+			if (adptRule.equals(newRule)) {
 				listRulesStudent.remove(i);
 				break;
 			}
