@@ -991,8 +991,14 @@ public class TrainingService {
 	private String[] adaptString(String string) {
 		String input2 = string.toUpperCase();
 		String[] inp2 = input2.split(",");
-		Arrays.sort(inp2);
-		return inp2;
+		
+		String [] trimmed = new String[inp2.length];
+		for (int i=0; i<inp2.length; i=i+1) {
+			trimmed[i]=inp2[i].trim();
+		}		
+		
+		Arrays.sort(trimmed);
+		return trimmed;
 	}
 
 	/**

@@ -57,6 +57,7 @@
 				</td>			
 				<td>
 					<button class="buttonItem" th:id="delFrequentAA" style="font-size: 12px;float:none;" th:onclick="deleteFrequent([[${#strings.arrayJoin(frequent.items, ', ')}]],[[${frequent.count}]])" >&#9003;</button>			
+					<button class="buttonItem" th:id="delFrequentAA" style="font-size: 12px;float:none;" th:onclick="frequentBack([[${#strings.arrayJoin(frequent.items, ', ')}]],[[${frequent.count}]])" >&#8617;</button>
 				</td>
       		</tr>
 	    </tbody>    	

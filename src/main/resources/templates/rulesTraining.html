@@ -213,6 +213,18 @@
 									[[${l5.percentage}]]
 									)" 
 									>&#9003;</button>
+							
+						<button class="buttonItem" th:id="delInterimAA" style="font-size: 12px;float:none;" 
+							th:onclick="ruleBack(
+									[[${#strings.arrayJoin(l5.lhs, ', ')}]],
+									[[${#strings.arrayJoin(l5.rhs, ', ')}]],	
+									[[${#strings.arrayJoin(l5.upperSupp, ', ')}]],
+									[[${#strings.arrayJoin(l5.lowerSupp, ', ')}]], 
+									[[${l5.upperConf}]],
+									[[${l5.lowerConf}]],
+									[[${l5.percentage}]]
+									) "
+								>&#8617;</button>	
 					</td>
 	      		</tr>
 	      		
@@ -254,6 +266,50 @@
 		var itemsListUpperDisplay = [];
 		var itemsListLower = [];
 		var itemsListLowerDisplay = [];
+		
+		
+		function ruleBack(lhs,rhs,confidenceU,confidenceL,numerator,denominator,percent){
+			
+			 itemsListLHS = [];
+			 itemsListLHS = lhs.split(",");
+			 itemsListDisplayLHS = [];
+			 itemsListDisplayLHS = lhs.split(",");
+			 itemsListRHS = [];
+			 itemsListRHS = rhs.split(",");
+			 itemsListDisplayRHS = []; 
+			 itemsListDisplayRHS = rhs.split(",");
+			 itemsListUpper = [];
+			 itemsListUpper = confidenceU.split(",");
+			 itemsListUpperDisplay = [];
+			 itemsListUpperDisplay = confidenceU.split(",");
+			 itemsListLower = [];
+			 itemsListLower = confidenceL.split(",");
+			 itemsListLowerDisplay = [];	
+			 itemsListLowerDisplay = confidenceL.split(",");
+			 
+			document.getElementById("LHS").innerHTML =itemsListDisplayLHS+"   ";				
+			document.getElementById("itemsFormLhs").value = itemsListLHS.toString();
+			
+			document.getElementById("RHS").innerHTML =itemsListDisplayRHS+"   ";			
+			document.getElementById("itemsFormRhs").value = itemsListRHS.toString();
+			
+			document.getElementById("upper").innerHTML ="Supp("+itemsListUpperDisplay+")";
+			document.getElementById("itemsFormUpper").value = itemsListUpper.toString();			
+			
+			document.getElementById("lower").innerHTML ="Supp("+itemsListLowerDisplay+")";				
+			document.getElementById("itemsFormLower").value = itemsListLower.toString();			
+			
+			
+			document.getElementById("numeratorNumber").innerHTML=numerator;
+			document.getElementById("inputNumerator").value=numerator;			
+			
+			document.getElementById("denominatorNumber").innerHTML=denominator;
+			document.getElementById("inputDenominator").value=denominator;
+			
+			document.getElementById("percentNumber").innerHTML=percent;
+			document.getElementById("inputPercent").value=percent;				
+			
+		}		
 		
 		function validate(){
 			let a = document.getElementById("LHS").innerHTML;

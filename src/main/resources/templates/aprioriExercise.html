@@ -61,6 +61,8 @@
 										<td align="right">
 											<button class="buttonItem" th:id="delInterimAA" style="font-size: 12px;float:none;" 
 												th:onclick="deleteInterim([[${#strings.arrayJoin(interimRow.items, ', ')}]],[[${interimRow.supportCount}]], [[${interimTable.idNumber}]])" >&#9003;</button>
+											<button class="buttonItem" th:id="delInterimAA" style="font-size: 12px;float:none;" 
+												th:onclick="interimBack([[${#strings.arrayJoin(interimRow.items, ', ')}]],[[${interimRow.supportCount}]])" >&#8617;</button>												
 										</td>
 									</tr>
 								</tbody>
@@ -237,6 +239,37 @@
 		var itemsListFrequent = [];
 		var itemsListFrequentDisplay = [];
 			
+		function interimBack(items, supportCount){
+			itemsListInterim = [];
+			itemsListInterim = items.split(",");
+			itemListInterimDisplay = [];
+			itemListInterimDisplay = items.split(",");
+			
+			document.getElementById("itemsInterim").innerHTML =itemListInterimDisplay+"   ";
+			
+			document.getElementById("itemsFormInterim").value = itemsListInterim.toString();			
+			
+			document.getElementById("supportInterim").innerHTML =supportCount;
+			document.getElementById("supportInterimInput").value=supportCount;
+			
+		}
+		
+		function frequentBack(items, supportCount){
+			
+			itemsListFrequent = [];
+			itemsListFrequent = items.split(",");
+
+			itemsListFrequentDisplay = [];
+			itemsListFrequentDisplay = items.split(",");
+
+			document.getElementById("itemsFrequent").innerHTML =itemsListFrequentDisplay+"   ";
+			document.getElementById("itemsFormFrequent").value = itemsListFrequent.toString();	
+			
+			document.getElementById("supportFrequent").innerHTML =supportCount;
+			document.getElementById("supportFrequentInput").value=supportCount;			
+			
+		}
+		
 		function deleteInterim(items, supportCount,step){	   		
 			document.getElementById("stepFormInterimD").value = step;		   		
 			document.getElementById("itemsFormInterimD").value = items;
