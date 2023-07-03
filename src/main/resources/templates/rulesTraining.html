@@ -35,14 +35,18 @@
 			<tr>
 				<div class="ruleBox">
 					<div th:class="itemsCurrent" th:text="'Current Rule: '" ></div>
-					<div th:id="LHS" th:class="itemsCurrent" th:text="'\'Left hand side\''" th:onclick="hideNshow('chooseLhs','LHS')"></div>
+					<div th:id="LHS" th:class="itemsCurrent" th:onclick="hideNshow('chooseLhs','LHS')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter left hand side items here\''"></span>
+					</div>
 					
 					<div th:id="validateLHS"style="float:left;color: rgb(255, 0, 0);"> 
 						&#8592; Please, enter items!
 					</div>
 					
 					<div  th:class="itemsCurrent"  th:text="'=>'" ></div>
-					<div th:id="RHS" th:class="itemsCurrent" th:text="'\'Right hand side\''" th:onclick="hideNshow('chooseRhs','RHS')"></div>
+					<div th:id="RHS" th:class="itemsCurrent" th:onclick="hideNshow('chooseRhs','RHS')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter right hand side items here\''"></span>
+					</div>
 					
 					<div th:id="validateRHS"style="float:left;color: rgb(255, 0, 0);"> 
 						&#8592; Please, enter items!
@@ -58,14 +62,18 @@
 				<div class="ruleBox">
 					<div th:class="itemsCurrent" th:text="'Confidence'" ></div>
 					<div  th:class="itemsCurrent"  th:text="'='" ></div>
-					<div th:id="upper" th:class="itemsCurrent" th:text="'Supp(\'Items\')'" th:onclick="hideNshow('chooseUpper','upper')"></div>
+					<div th:id="upper" th:class="itemsCurrent" th:onclick="hideNshow('chooseUpper','upper')">
+						Supp(<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter items here\''"></span>)
+					</div>
 					
 					<div th:id="validateLSupItemsUpper"style="float:left;color: rgb(255, 0, 0);"> 
 						&#8592; Please, enter items!
 					</div>
 					
 					<div  th:class="itemsCurrent"  th:text="'/'" ></div>
-					<div th:id="lower" th:class="itemsCurrent" th:text="'Supp(\'Items\')'" th:onclick="hideNshow('chooseLower','lower')"></div>
+					<div th:id="lower" th:class="itemsCurrent" th:onclick="hideNshow('chooseLower','lower')">
+						Supp(<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter items here\''"></span>)
+					</div>
 					
 					<div th:id="validateSupItemsLower"style="float:left;color: rgb(255, 0, 0);"> 
 						&#8592; Please, enter items!
@@ -80,21 +88,27 @@
 				<div class="ruleBox">
 					<div th:class="itemsCurrent" th:text="'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  '" ></div>
 					<div  th:class="itemsCurrent"  th:text="'='" ></div>
-					<div th:id="numeratorNumber" th:class="itemsCurrent" th:text="'\'Numerator\''" th:onclick="hideNshow('chooseNumerator','numeratorNumber')"></div>
+					<div th:id="numeratorNumber" th:class="itemsCurrent" th:onclick="hideNshow('chooseNumerator','numeratorNumber')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter numerator here\''"></span>
+					</div>
 					
 					<div th:id="validateNumerator"style="float:left;color: rgb(255, 0, 0);"> 
 						&#8592; Please, enter number!
 					</div>
 					
 					<div  th:class="itemsCurrent"  th:text="'/'" ></div>
-					<div th:id="denominatorNumber" th:class="itemsCurrent" th:text="'\'Denominator\''" th:onclick="hideNshow('chooseDenominator','denominatorNumber')"></div>
+					<div th:id="denominatorNumber" th:class="itemsCurrent" th:onclick="hideNshow('chooseDenominator','denominatorNumber')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter denominator here\''"></span>
+					</div>
 					
 					<div th:id="validateDenominator" style="float:left;color: rgb(255, 0, 0);"> 
 						&#8592; Please, enter number!
 					</div>
 					
 					<div  th:class="itemsCurrent"  th:text="'='" ></div>
-					<div th:id="percentNumber" th:class="itemsCurrent" th:text="'\'Percent\''" th:onclick="hideNshow('choosePercent','percentNumber')"></div>
+					<div th:id="percentNumber" th:class="itemsCurrent" th:onclick="hideNshow('choosePercent','percentNumber')">
+						<span style="font-size: 0.8em;opacity:0.3;" th:text="'\'Enter percent here\''"></span>
+					</div>
 					
 					<div th:id="validatePercent" style="float:left;color: rgb(255, 0, 0);"> 
 						&#8592; Please, enter number!

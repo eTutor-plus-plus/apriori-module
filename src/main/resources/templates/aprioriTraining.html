@@ -102,8 +102,9 @@
 					<div class="ruleBox">
 						<p>
 							<div th:class="itemsCurrent" th:text="'Items for row in L'+${stepNumber}+': '" ></div>
-							<div  th:id="itemsInterim" th:class="itemsCurrent" th:text="'\'Please, enter items here\''" 
-								th:onclick="hideNshow('chooseInterimItems','itemsInterim')"></div>
+							<div  th:id="itemsInterim" th:class="itemsCurrent" th:onclick="hideNshow('chooseInterimItems','itemsInterim')">
+								<span th:id="itemsInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter items here\''"></span>	
+							</div>
 								
 								<div th:id="validateInterimItems"style="float:left;color: rgb(255, 0, 0);"> 
 									&#8592; Please, enter items before saving saving the row!
@@ -132,8 +133,9 @@
 							</th:block>
 							<p>	
 								<div th:class="itemsCurrent" style="float:left;" th:text="'Associated support count for  row in L'+${stepNumber}+': '" ></div>
-								<div th:id="supportInterim" th:class="itemsCurrent" th:text="'\'Please, enter support count here\''" 
-									th:onclick="hideNshow('chooseInterimSupport','supportInterim')"></div>
+								<div th:id="supportInterim" th:class="itemsCurrent" th:onclick="hideNshow('chooseInterimSupport','supportInterim')">
+									<span th:id="itemsInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter support count here\''"></span>
+								</div>
 									
 								<div th:id="validateInterimSupport"style="float:left;color: rgb(255, 0, 0);"> 
 									&#8592; Please, enter support count before saving saving the row!
@@ -165,8 +167,9 @@
 					<div class="ruleBox">
 						<p>
 							<div th:class="itemsCurrent" th:text="'Items for row in frequent pattern: '" ></div>
-							<div th:id="itemsFrequent" th:class="itemsCurrent" th:text="'\'Please, enter items here\''" 
-								th:onclick="hideNshow('chooseFrequentItems','itemsFrequent')"></div>
+							<div th:id="itemsFrequent" th:class="itemsCurrent" th:onclick="hideNshow('chooseFrequentItems','itemsFrequent')">
+								<span th:id="itemsInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter items here\''"></span>
+							</div>
 								
 								<div th:id="validateFrequentItems"style="float:left;color: rgb(255, 0, 0);"> 
 									&#8592; Please, enter items before saving saving the row!
@@ -195,8 +198,9 @@
 						</th:block>
 						<p>
 							<div  th:class="itemsCurrent"  th:text="'Associated support count for row in frequent pattern: '" ></div>
-							<div th:id="supportFrequent" th:class="itemsCurrent" th:text="'\'Please, enter support count here\''" 
-								th:onclick="hideNshow('chooseFrequentSupport','supportFrequent')"></div>
+							<div th:id="supportFrequent" th:class="itemsCurrent" th:onclick="hideNshow('chooseFrequentSupport','supportFrequent')">
+								<span th:id="itemsInterimInner" style="font-size: 0.8em;opacity:0.3;" th:text="'\'Please, enter support count here\''"></span>
+							</div>
 								
 								<div th:id="validateFrequentSupport"style="float:left;color: rgb(255, 0, 0);"> 
 									&#8592; Please, enter support count before saving saving the row!
